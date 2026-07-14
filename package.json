@@ -1,0 +1,12 @@
+{
+  "name": "invitacion-boda-emily-julian",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Invitación de boda de Viridiana & Felipe - sitio estático + funciones serverless en Vercel",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0"
+  }
+}

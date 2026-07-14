@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de RSVP — Viridiana &amp; Felipe</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="admin-page">
+
+<!-- ============ LOGIN ============ -->
+<section class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="monogram"><span class="heart">♥</span> V &amp; F</div>
+    <h1>Panel de confirmaciones</h1>
+    <p class="hint">Acceso privado. Ingresa la contraseña para ver el RSVP.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-solid" id="loginSubmit">Entrar</button>
+      <p class="form-note" id="loginNote" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" hidden>
+  <header class="admin-topbar">
+    <div class="monogram"><span class="heart">♥</span> V &amp; F — RSVP</div>
+    <div class="admin-topbar-actions">
+      <button class="btn btn-outline btn-sm" id="refreshBtn">Actualizar</button>
+      <button class="btn btn-outline btn-sm" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="stats-row">
+      <div class="stat-tile">
+        <div class="stat-number" id="statResponses">0</div>
+        <div class="stat-label">Respuestas</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-number" id="statGuests">0</div>
+        <div class="stat-label">Invitados confirmados</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-number" id="statDeclined">0</div>
+        <div class="stat-label">No asisten</div>
+      </div>
+    </div>
+
+    <div id="tableContainer">
+      <p class="admin-loading">Cargando confirmaciones…</p>
+    </div>
+  </main>
+</div>
+
+<script src="../js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Viridiana &amp; Felipe — Nos Casamos</title>
+<meta name="description" content="Acompáñanos a celebrar la boda de Viridiana y Felipe, 14 de Noviembre de 2026.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='26'%3E%F0%9F%A4%8D%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mrs+Saint+Delafield&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="theme-moss">
+
+<!-- ============ ENVELOPE GATE (portada de apertura) ============ -->
+<div class="envelope-gate" id="envelopeGate">
+  <div class="envelope-gate-inner">
+    <div class="envelope" id="envelope">
+      <div class="envelope-back" aria-hidden="true"></div>
+
+      <figure class="polaroid" id="polaroidCard" aria-hidden="true">
+        <div class="photo-slot polaroid-photo" id="polaroidPhoto">
+          <img src="assets/images/hero.jpg" alt=""
+               onerror="this.closest('.photo-slot').classList.add('is-missing')"
+               onload="this.closest('.photo-slot').classList.remove('is-missing')">
+          <span class="photo-placeholder-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
+            <code>assets/images/hero.jpg</code>
+          </span>
+        </div>
+      </figure>
+
+      <div class="envelope-flap" aria-hidden="true"></div>
+
+      <button class="wax-seal" id="waxSeal" type="button" aria-label="Abrir la invitación de Viridiana y Felipe">
+        <span class="wax-seal-initials">V·F</span>
+      </button>
+
+      <div class="click-hint" aria-hidden="true">Click aquí</div>
+    </div>
+    <p class="envelope-caption">Toca el sello para abrir tu invitación</p>
+  </div>
+</div>
+<script>
+  if (sessionStorage.getItem("envelopeOpened") === "1") {
+    document.getElementById("envelopeGate").classList.add("is-skipped");
+  } else {
+    document.documentElement.classList.add("gate-lock");
+  }
+</script>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="monogram"><span class="heart">♥</span> V &amp; F</div>
+  <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-links">
+    <a href="#historia" data-nav-link>Historia</a>
+    <a href="#itinerario" data-nav-link>Itinerario</a>
+    <a href="#ubicaciones" data-nav-link>Ubicaciones</a>
+    <a href="#padrinos" data-nav-link>Padrinos</a>
+    <a href="#vestimenta" data-nav-link>Vestimenta</a>
+    <a href="#regalos" data-nav-link>Regalos</a>
+    <a href="#galeria" data-nav-link>Galería</a>
+    <a href="#deseos" data-nav-link>Deseos</a>
+    <a href="#canciones" data-nav-link>Canciones</a>
+    <a href="#contactos" data-nav-link>Contactos</a>
+    <a href="#rsvp" data-nav-link>RSVP</a>
+  </nav>
+</header>
+
+<!-- ============ MOBILE OFF-CANVAS MENU ============ -->
+<nav class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <a href="#historia" data-nav-link>Nuestra Historia</a>
+  <a href="#itinerario" data-nav-link>Itinerario</a>
+  <a href="#ubicaciones" data-nav-link>Ubicaciones</a>
+  <a href="#padrinos" data-nav-link>Padrinos</a>
+  <a href="#vestimenta" data-nav-link>Código de Vestimenta</a>
+  <a href="#regalos" data-nav-link>Mesa de Regalos</a>
+  <a href="#galeria" data-nav-link>Galería</a>
+  <a href="#deseos" data-nav-link>Buenos Deseos</a>
+  <a href="#canciones" data-nav-link>Canciones</a>
+  <a href="#contactos" data-nav-link>Contactos</a>
+  <a href="#rsvp" data-nav-link>RSVP</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio" data-wedding-date="2026-11-14T19:30:00">
+  <div class="hero-media photo-slot" id="heroMedia">
+    <img src="assets/images/hero.jpg" alt="Viridiana y Felipe"
+         onerror="this.closest('.photo-slot').classList.add('is-missing')"
+         onload="this.closest('.photo-slot').classList.remove('is-missing')">
+    <span class="photo-placeholder-text">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
+      Coloca aquí tu foto principal<br><code>assets/images/hero.jpg</code>
+    </span>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Nos Casamos</p>
+    <h1 class="hero-names">Viridiana<span class="amp">&amp;</span>Felipe</h1>
+    <p class="hero-date">14 de Noviembre de 2026</p>
+
+    <div class="divider-motif hero-divider" aria-hidden="true"><span>✦</span></div>
+
+    <div class="countdown" id="countdown" aria-label="Cuenta regresiva para la boda">
+      <div class="countdown-unit"><span class="countdown-number" data-unit="days">00</span><span class="countdown-label">Días</span></div>
+      <div class="countdown-unit"><span class="countdown-number" data-unit="hours">00</span><span class="countdown-label">Horas</span></div>
+      <div class="countdown-unit"><span class="countdown-number" data-unit="minutes">00</span><span class="countdown-label">Mins</span></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true"></div>
+</section>
+
+<!-- ============ NUESTRA HISTORIA ============ -->
+<section class="historia" id="historia">
+  <div class="container">
+    <div class="historia-grid">
+      <div class="historia-text reveal">
+        <div class="historia-header-mobile">
+          <p class="eyebrow">El Comienzo</p>
+          <h2 class="section-heading">Nuestra Historia</h2>
+          <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+        </div>
+        <p class="historia-lead">
+          Todo comenzó con una coincidencia fortuita y una charla sobre libros que duró
+          hasta el amanecer. Desde ese primer encuentro en el café de la esquina, supimos
+          que estábamos ante algo extraordinario.
+        </p>
+        <blockquote class="vow">
+          «Nuestra vida juntos no ha sido solo una serie de días, sino una colección de
+          momentos mágicos que nos han traído hasta este altar.»
+        </blockquote>
+      </div>
+
+      <figure class="historia-photo reveal">
+        <div class="frame-offset" aria-hidden="true"></div>
+        <div class="photo-slot historia-photo-slot">
+          <img src="assets/images/historia.jpg" alt="Viridiana y Felipe en el jardín"
+               onerror="this.closest('.photo-slot').classList.add('is-missing')"
+               onload="this.closest('.photo-slot').classList.remove('is-missing')">
+          <span class="photo-placeholder-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
+            Coloca aquí una foto de pareja<br><code>assets/images/historia.jpg</code>
+          </span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ITINERARIO ============ -->
+<section class="itinerario" id="itinerario">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">El Gran Día</p>
+    <h2 class="section-heading">Itinerario</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <ol class="timeline">
+      <li class="timeline-item reveal">
+        <span class="timeline-time">6:00 PM</span>
+        <p class="timeline-title">Llegada de invitados</p>
+      </li>
+      <li class="timeline-item reveal">
+        <span class="timeline-time">7:30 PM</span>
+        <p class="timeline-title">Ceremonia religiosa</p>
+      </li>
+      <li class="timeline-item reveal">
+        <span class="timeline-time">8:30 PM</span>
+        <p class="timeline-title">Cóctel de bienvenida</p>
+      </li>
+      <li class="timeline-item reveal">
+        <span class="timeline-time">9:30 PM</span>
+        <p class="timeline-title">Cena</p>
+      </li>
+      <li class="timeline-item reveal">
+        <span class="timeline-time">10:30 PM</span>
+        <p class="timeline-title">Fiesta y baile</p>
+      </li>
+      <li class="timeline-item reveal">
+        <span class="timeline-time">12:30 AM</span>
+        <p class="timeline-title">Última pieza</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ UBICACIONES ============ -->
+<section class="ubicaciones" id="ubicaciones">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Cómo Llegar</p>
+    <h2 class="section-heading">Ubicaciones</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="ubicaciones-cards">
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <p class="detail-label">Ceremonia</p>
+        <p class="detail-value">Iglesia San Francisco<br>Antigua, Guatemala</p>
+        <p class="detail-time">7:30 PM</p>
+        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+San+Francisco+Antigua+Guatemala" target="_blank" rel="noopener">
+          Ver mapa
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <p class="detail-label">Recepción</p>
+        <p class="detail-value">Villa de las Flores<br>Antigua, Guatemala</p>
+        <p class="detail-time">8:30 PM</p>
+        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Villa+de+las+Flores+Antigua+Guatemala" target="_blank" rel="noopener">
+          Ver mapa
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PADRINOS ============ -->
+<section class="padrinos" id="padrinos">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Con Cariño</p>
+    <h2 class="section-heading">Padrinos</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="padrinos-grid">
+      <div class="detail-card reveal">
+        <p class="detail-label">Padrinos de Velación</p>
+        <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
+      </div>
+      <div class="detail-card reveal">
+        <p class="detail-label">Padrinos de Anillos</p>
+        <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
+      </div>
+      <div class="detail-card reveal">
+        <p class="detail-label">Padrinos de Arras</p>
+        <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
+      </div>
+      <div class="detail-card reveal">
+        <p class="detail-label">Padrinos de Lazo</p>
+        <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CÓDIGO DE VESTIMENTA ============ -->
+<section class="vestimenta" id="vestimenta">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Ven Elegante</p>
+    <h2 class="section-heading">Código de Vestimenta</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="vestimenta-card reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 8l6 4-6 4V8Z" stroke-linejoin="round"/><path d="M20 8l-6 4 6 4V8Z" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.6"/></svg>
+      <p class="detail-label">Formal / Etiqueta</p>
+      <p class="vestimenta-text">Nos encantaría verte elegante en nuestra celebración. Evita por favor el blanco, marfil y tonos pastel muy claros (reservados para la novia).</p>
+      <div class="palette-row" aria-hidden="true">
+        <span class="palette-swatch" style="background:#7C8659"></span>
+        <span class="palette-swatch" style="background:#AD7A3C"></span>
+        <span class="palette-swatch" style="background:#2E2B20"></span>
+        <span class="palette-swatch" style="background:#E7DAC0"></span>
+        <span class="palette-swatch" style="background:#D9D3B0"></span>
+      </div>
+      <p class="palette-caption">Paleta sugerida</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MESA DE REGALOS ============ -->
+<section class="regalos" id="regalos">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Con Amor</p>
+    <h2 class="section-heading">Mesa de Regalos</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <p class="section-intro">Tu presencia es el regalo más importante para nosotros. Si deseas obsequiarnos algo más, aquí tienes un par de opciones.</p>
+
+    <div class="ubicaciones-cards">
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
+        <p class="detail-label">Lluvia de Sobres</p>
+        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Si prefieres contribuir en efectivo, habrá una urna disponible el día del evento.</p>
+      </div>
+
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
+        <p class="detail-label">Transferencia Bancaria</p>
+        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body); line-height:1.9;">
+          Titular: Viridiana Pérez (ejemplo)<br>
+          Banco: Banco Ejemplo<br>
+          Cuenta monetaria: 0000-0000-0000
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALERÍA ============ -->
+<section class="galeria" id="galeria">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Momentos</p>
+    <h2 class="section-heading">Galería</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="gallery-grid">
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-1.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-1.jpg</code></span>
+      </figure>
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-2.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-2.jpg</code></span>
+      </figure>
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-3.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-3.jpg</code></span>
+      </figure>
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-4.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-4.jpg</code></span>
+      </figure>
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-5.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-5.jpg</code></span>
+      </figure>
+      <figure class="photo-slot gallery-item reveal">
+        <img src="assets/images/gallery-6.jpg" alt=""
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text"><code>gallery-6.jpg</code></span>
+      </figure>
+    </div>
+
+    <p class="hashtag-callout">Comparte tus fotos con<br><span>#ViridianaYFelipe2026</span></p>
+  </div>
+</section>
+
+<!-- ============ BUENOS DESEOS ============ -->
+<section class="deseos" id="deseos">
+  <div class="container rsvp-inner">
+    <p class="eyebrow eyebrow--center">Tu Mensaje</p>
+    <h2 class="section-heading">Buenos Deseos</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <blockquote class="vow" style="margin-inline:auto; text-align:left;">
+      «Que este sea el comienzo de una vida llena de amor, risas y aventuras compartidas.»
+    </blockquote>
+    <p class="section-intro">¿Quieres dejarnos unas palabras? Escríbelas en el mensaje del formulario de confirmación.</p>
+    <a class="btn btn-outline" href="#rsvp" style="margin-top: var(--space-md);">Ir al formulario</a>
+  </div>
+</section>
+
+<!-- ============ SUGERENCIA DE CANCIONES ============ -->
+<section class="canciones" id="canciones">
+  <div class="container rsvp-inner">
+    <p class="eyebrow eyebrow--center">Que No Falte</p>
+    <h2 class="section-heading">Sugerencia de Canciones</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <p class="section-intro">Ayúdanos a armar el playlist de la fiesta — agrega tus canciones favoritas a nuestra lista colaborativa.</p>
+    <a class="btn btn-solid" href="https://open.spotify.com/playlist/TU-PLAYLIST-AQUI" target="_blank" rel="noopener" style="margin-top: var(--space-md);">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+      Abrir playlist
+    </a>
+  </div>
+</section>
+
+<!-- ============ CONTACTOS ============ -->
+<section class="contactos" id="contactos">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">¿Dudas?</p>
+    <h2 class="section-heading">Contactos</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="ubicaciones-cards">
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p class="detail-label">Organización</p>
+        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Nombre Apellido</p>
+        <a class="btn btn-outline" href="https://wa.me/50200000000" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+
+      <div class="detail-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p class="detail-label">Padres de familia</p>
+        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Nombre Apellido</p>
+        <a class="btn btn-outline" href="https://wa.me/50200000000" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RSVP ============ -->
+<section class="rsvp" id="rsvp">
+  <div class="container rsvp-inner">
+    <p class="eyebrow eyebrow--center">Confírmanos</p>
+    <h2 class="section-heading">RSVP</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <p class="rsvp-deadline">Por favor, confirma tu asistencia antes del 15 de Octubre de 2026.</p>
+
+    <form class="rsvp-form" id="rsvpForm" novalidate>
+      <div class="field">
+        <label for="fullName">Nombre completo</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Escribe tu nombre aquí" required autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="attending">¿Asistirás?</label>
+        <select id="attending" name="attending" required>
+          <option value="yes" selected>Sí, ahí estaré</option>
+          <option value="no">No podré asistir</option>
+        </select>
+      </div>
+
+      <div class="field field-collapsible" id="guestCountField">
+        <div class="field-collapsible-inner">
+          <label for="guestCount">Número de invitados</label>
+          <select id="guestCount" name="guestCount">
+            <option value="1" selected>1 Persona</option>
+            <option value="2">2 Personas</option>
+            <option value="3">3 Personas</option>
+            <option value="4">4 Personas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Mensaje para los novios</label>
+        <textarea id="message" name="message" placeholder="Opcional…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-solid" id="rsvpSubmit">Confirmar asistencia</button>
+      <p class="form-note" id="rsvpNote" role="status"></p>
+    </form>
+
+    <div class="rsvp-success" id="rsvpSuccess">
+      <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.9-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.8.8 6 3 2.2-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7C19.5 16.1 12 21 12 21Z"/></svg>
+      <h3>¡Gracias por confirmar!</h3>
+      <p>Hemos recibido tu respuesta. Nos vemos pronto ♥</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="monogram"><span class="heart">♥</span> V &amp; F</div>
+  <small>&copy; 2026 Viridiana &amp; Felipe. Hecho con amor.</small>
+</footer>
+
+<!-- ============ MOBILE BOTTOM NAV ============ -->
+<nav class="bottom-nav">
+  <a href="#historia" data-nav-link data-bottom-nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v14.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 3v18M18 22H6.5A2.5 2.5 0 0 1 4 19.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Historia
+  </a>
+  <a href="#itinerario" data-nav-link data-bottom-nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6h13M8 12h13M8 18h13" stroke-linecap="round"/><circle cx="3.5" cy="6" r="1.4"/><circle cx="3.5" cy="12" r="1.4"/><circle cx="3.5" cy="18" r="1.4"/></svg>
+    Itinerario
+  </a>
+  <a href="#ubicaciones" data-nav-link data-bottom-nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+    Ubicación
+  </a>
+  <a href="#padrinos" data-nav-link data-bottom-nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="3.2"/><path d="M22 21v-2a4 4 0 0 0-2.8-3.85M15.2 3.2a4 4 0 0 1 0 7.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Padrinos
+  </a>
+  <a href="#rsvp" data-nav-link data-bottom-nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7.5-4.9-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.8.8 6 3 2.2-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7C19.5 16.1 12 21 12 21Z" stroke-linejoin="round"/></svg>
+    RSVP
+  </a>
+</nav>
+
+<script src="js/main.js"></script>
+</body>
+</html>
