@@ -40,24 +40,58 @@
   </header>
 
   <main class="admin-main">
-    <div class="stats-row">
-      <div class="stat-tile">
-        <div class="stat-number" id="statResponses">0</div>
-        <div class="stat-label">Respuestas</div>
-      </div>
-      <div class="stat-tile">
-        <div class="stat-number" id="statGuests">0</div>
-        <div class="stat-label">Invitados confirmados</div>
-      </div>
-      <div class="stat-tile">
-        <div class="stat-number" id="statDeclined">0</div>
-        <div class="stat-label">No asisten</div>
-      </div>
+    <div class="admin-tabs">
+      <button class="admin-tab is-active" id="tabResponsesBtn" type="button">Confirmaciones</button>
+      <button class="admin-tab" id="tabGuestsBtn" type="button">Invitados</button>
     </div>
 
-    <div id="tableContainer">
-      <p class="admin-loading">Cargando confirmaciones…</p>
-    </div>
+    <!-- ---- Confirmaciones (respuestas crudas del formulario) ---- -->
+    <section id="panelResponses">
+      <div class="stats-row">
+        <div class="stat-tile">
+          <div class="stat-number" id="statResponses">0</div>
+          <div class="stat-label">Respuestas</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-number" id="statGuests">0</div>
+          <div class="stat-label">Invitados confirmados</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-number" id="statDeclined">0</div>
+          <div class="stat-label">No asisten</div>
+        </div>
+      </div>
+
+      <div id="tableContainer">
+        <p class="admin-loading">Cargando confirmaciones…</p>
+      </div>
+    </section>
+
+    <!-- ---- Invitados (tu lista precargada, con boletos y estado) ---- -->
+    <section id="panelGuests" hidden>
+      <div class="stats-row">
+        <div class="stat-tile">
+          <div class="stat-number" id="statGuestTotal">0</div>
+          <div class="stat-label">Invitaciones</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-number" id="statTicketsUsed">0</div>
+          <div class="stat-label">Boletos confirmados</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-number" id="statTicketsTotal">0</div>
+          <div class="stat-label">Boletos asignados</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-number" id="statPending">0</div>
+          <div class="stat-label">Pendientes</div>
+        </div>
+      </div>
+
+      <div id="guestsTableContainer">
+        <p class="admin-loading">Cargando invitados…</p>
+      </div>
+    </section>
   </main>
 </div>
 

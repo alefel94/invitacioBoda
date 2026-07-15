@@ -15,38 +15,96 @@
 
 <!-- ============ ENVELOPE GATE (portada de apertura) ============ -->
 <div class="envelope-gate" id="envelopeGate">
-  <div class="envelope-gate-inner">
-    <div class="envelope" id="envelope">
-      <div class="envelope-back" aria-hidden="true"></div>
-
-      <figure class="polaroid" id="polaroidCard" aria-hidden="true">
-        <div class="photo-slot polaroid-photo" id="polaroidPhoto">
-          <img src="assets/images/hero.jpg" alt=""
-               onerror="this.closest('.photo-slot').classList.add('is-missing')"
-               onload="this.closest('.photo-slot').classList.remove('is-missing')">
-          <span class="photo-placeholder-text">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
-            <code>assets/images/hero.jpg</code>
-          </span>
-        </div>
-      </figure>
-
-      <div class="envelope-flap" aria-hidden="true"></div>
-
-      <button class="wax-seal" id="waxSeal" type="button" aria-label="Abrir la invitación de Viridiana y Felipe">
-        <span class="wax-seal-initials">V·F</span>
-      </button>
-
-      <div class="click-hint" aria-hidden="true">Click aquí</div>
+  <!-- ESTADO CERRADO: el sobre a pantalla completa, partido en dos mitades.
+       Cada mitad contiene el MISMO arte completo (lino + solapa); el clip-path
+       recorta cuál mitad se ve, así la costura es invisible hasta que se abre. -->
+  <div class="envelope-view" id="envelopeView">
+    <div class="envelope-half envelope-half-top" aria-hidden="true">
+      <svg class="envelope-art-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="envBody" x1="0" y1="0" x2="0.15" y2="1">
+            <stop offset="0" stop-color="#5a6540"/>
+            <stop offset="0.55" stop-color="#4d5634"/>
+            <stop offset="1" stop-color="#414a28"/>
+          </linearGradient>
+          <linearGradient id="envFlap" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#6f7b4d"/>
+            <stop offset="0.45" stop-color="#5d6840"/>
+            <stop offset="1" stop-color="#49522f"/>
+          </linearGradient>
+          <linearGradient id="envFlapH" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0" stop-color="#6f7b4d"/>
+            <stop offset="0.45" stop-color="#5d6840"/>
+            <stop offset="1" stop-color="#49522f"/>
+          </linearGradient>
+          <filter id="envShadowH" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="-1.6" dy="0" stdDeviation="1.6" flood-color="#080a03" flood-opacity="0.5"/>
+          </filter>
+          <radialGradient id="envVig" cx="0.5" cy="0.5" r="0.72">
+            <stop offset="0.45" stop-color="#0c0f06" stop-opacity="0"/>
+            <stop offset="1" stop-color="#0c0f06" stop-opacity="0.42"/>
+          </radialGradient>
+          <filter id="envShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="1.6" stdDeviation="1.6" flood-color="#080a03" flood-opacity="0.5"/>
+          </filter>
+        </defs>
+        <rect width="100" height="100" fill="url(#envBody)"/>
+        <polygon class="flap-landscape" points="0,0 100,0 50,63" fill="url(#envFlap)" filter="url(#envShadow)"/>
+        <polygon class="flap-portrait" points="100,0 100,100 50,50" fill="url(#envFlapH)" filter="url(#envShadowH)"/>
+        <rect width="100" height="100" fill="url(#envVig)"/>
+      </svg>
     </div>
-    <p class="envelope-caption">Toca el sello para abrir tu invitación</p>
+    <div class="envelope-half envelope-half-bottom" aria-hidden="true">
+      <svg class="envelope-art-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <rect width="100" height="100" fill="url(#envBody)"/>
+        <polygon class="flap-landscape" points="0,0 100,0 50,63" fill="url(#envFlap)" filter="url(#envShadow)"/>
+        <polygon class="flap-portrait" points="100,0 100,100 50,50" fill="url(#envFlapH)" filter="url(#envShadowH)"/>
+        <rect width="100" height="100" fill="url(#envVig)"/>
+      </svg>
+    </div>
+
+    <div class="envelope-seal-wrap">
+      <div class="click-hint" aria-hidden="true">Click Aquí</div>
+      <button class="wax-seal" id="waxSeal" type="button" aria-label="Abrir la invitación de Viridiana y Felipe">
+        <img src="assets/images/sellocorazon.png" alt="">
+      </button>
+    </div>
+  </div>
+
+  <!-- ESTADO ABIERTO: la carta -->
+  <div class="letter-card" id="letterCard" hidden>
+    <div class="letter-frame" aria-hidden="true">
+      <span class="letter-corner c-tl"></span>
+      <span class="letter-corner c-tr"></span>
+      <span class="letter-corner c-br"></span>
+      <span class="letter-corner c-bl"></span>
+    </div>
+    <div class="letter-inner">
+      <div class="letter-photo photo-slot">
+        <img src="assets/images/hero.jpg" alt="Viridiana y Felipe"
+             onerror="this.closest('.photo-slot').classList.add('is-missing')"
+             onload="this.closest('.photo-slot').classList.remove('is-missing')">
+        <span class="photo-placeholder-text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
+          <code>assets/images/hero.jpg</code>
+        </span>
+      </div>
+      <div class="letter-body">
+        <p class="letter-salutation">Queridos invitados:</p>
+        <p>Hay personas que llegan a nuestra vida y dejan una huella imborrable. Ustedes son parte de esos momentos, de esas sonrisas, de los recuerdos que han dado forma a nuestra historia.</p>
+        <p>Por eso, queremos que nos acompañen en uno de los días más importantes de nuestras vidas. Su presencia hará que esta celebración sea aún más especial, porque no solo son nuestros invitados, sino personas muy significativas para nosotros.</p>
+        <p>Gracias por formar parte de nuestro camino. Será un honor compartir con ustedes este momento tan especial.</p>
+        <p class="letter-signoff">Con todo nuestro amor,<span class="letter-names">Viridiana &amp; Felipe</span></p>
+        <button class="btn btn-solid" id="continueBtn" type="button">Confirmar asistencia</button>
+      </div>
+    </div>
   </div>
 </div>
 <script>
   if (sessionStorage.getItem("envelopeOpened") === "1") {
     document.getElementById("envelopeGate").classList.add("is-skipped");
   } else {
-    document.documentElement.classList.add("gate-lock");
+    document.documentElement.classList.add("no-scroll");
   }
 </script>
 
@@ -56,22 +114,9 @@
   <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
   </button>
-  <nav class="nav-links">
-    <a href="#historia" data-nav-link>Historia</a>
-    <a href="#itinerario" data-nav-link>Itinerario</a>
-    <a href="#ubicaciones" data-nav-link>Ubicaciones</a>
-    <a href="#padrinos" data-nav-link>Padrinos</a>
-    <a href="#vestimenta" data-nav-link>Vestimenta</a>
-    <a href="#regalos" data-nav-link>Regalos</a>
-    <a href="#galeria" data-nav-link>Galería</a>
-    <a href="#deseos" data-nav-link>Deseos</a>
-    <a href="#canciones" data-nav-link>Canciones</a>
-    <a href="#contactos" data-nav-link>Contactos</a>
-    <a href="#rsvp" data-nav-link>RSVP</a>
-  </nav>
 </header>
 
-<!-- ============ MOBILE OFF-CANVAS MENU ============ -->
+<!-- ============ OFF-CANVAS MENU (hamburguesa, todos los tamaños) ============ -->
 <nav class="mobile-menu" id="mobileMenu">
   <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
@@ -86,8 +131,17 @@
   <a href="#deseos" data-nav-link>Buenos Deseos</a>
   <a href="#canciones" data-nav-link>Canciones</a>
   <a href="#contactos" data-nav-link>Contactos</a>
-  <a href="#rsvp" data-nav-link>RSVP</a>
+  <a href="rsvp.html" data-rsvp-link>RSVP</a>
 </nav>
+
+<!-- ============ MÚSICA DE FONDO ============ -->
+<audio id="bgMusic" loop preload="none">
+  <source src="assets/audio/song.mp3" type="audio/mpeg">
+</audio>
+<button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" hidden>
+  <svg class="icon-playing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+  <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><path d="M15 10l6 6M21 10l-6 6" stroke-linecap="round"/></svg>
+</button>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="inicio" data-wedding-date="2026-11-14T19:30:00">
@@ -112,11 +166,23 @@
       <div class="countdown-unit"><span class="countdown-number" data-unit="days">00</span><span class="countdown-label">Días</span></div>
       <div class="countdown-unit"><span class="countdown-number" data-unit="hours">00</span><span class="countdown-label">Horas</span></div>
       <div class="countdown-unit"><span class="countdown-number" data-unit="minutes">00</span><span class="countdown-label">Mins</span></div>
+      <div class="countdown-unit"><span class="countdown-number" data-unit="seconds">00</span><span class="countdown-label">Segs</span></div>
     </div>
   </div>
 
   <div class="scroll-hint" aria-hidden="true"></div>
 </section>
+
+<!-- ============ FRASE DESTACADA ============ -->
+<section class="quote-band" id="frase">
+  <div class="container">
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <p class="quote-band-text reveal">«El amor no se trata de cuánto tiempo estuvimos juntos, sino de cuánto vivimos en cada momento.»</p>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+  </div>
+</section>
+
+
 
 <!-- ============ NUESTRA HISTORIA ============ -->
 <section class="historia" id="historia">
@@ -129,13 +195,19 @@
           <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
         </div>
         <p class="historia-lead">
-          Todo comenzó con una coincidencia fortuita y una charla sobre libros que duró
-          hasta el amanecer. Desde ese primer encuentro en el café de la esquina, supimos
-          que estábamos ante algo extraordinario.
+          Todo comenzó con una coincidencia: una historia respondida, una conversación
+          que surgió sin planearse y una salida entre amigos que, sin que lo
+          imagináramos, marcó el inicio de nuestra historia de amor.
+        </p>
+        <p class="historia-lead">
+          Lo que parecía un encuentro más se convirtió en incontables momentos
+          compartidos, risas, aprendizajes y recuerdos que nos llevaron a descubrir
+          que queríamos recorrer la vida juntos.
         </p>
         <blockquote class="vow">
-          «Nuestra vida juntos no ha sido solo una serie de días, sino una colección de
-          momentos mágicos que nos han traído hasta este altar.»
+          «Las mejores historias nacen cuando menos las esperas, y la nuestra comenzó
+          exactamente así: con una simple coincidencia que terminó cambiando nuestras
+          vidas para siempre.»
         </blockquote>
       </div>
 
@@ -224,6 +296,26 @@
   </div>
 </section>
 
+<!-- ============ PADRES ============ -->
+<section class="padres" id="padres">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Con La Bendición De Dios</p>
+    <h2 class="section-heading">Y De Nuestros Padres</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <div class="padres-grid">
+      <div class="padres-col reveal">
+        <p class="detail-label">Padres de la novia</p>
+        <p class="detail-value">Nombre Apellido<br>Nombre Apellido</p>
+      </div>
+      <div class="padres-col reveal">
+        <p class="detail-label">Padres del novio</p>
+        <p class="detail-value">Nombre Apellido<br>Nombre Apellido</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PADRINOS ============ -->
 <section class="padrinos" id="padrinos">
   <div class="container">
@@ -272,6 +364,30 @@
       </div>
       <p class="palette-caption">Paleta sugerida</p>
     </div>
+  </div>
+</section>
+
+<!-- ============ RECOMENDACIONES ============ -->
+<section class="recomendaciones" id="recomendaciones">
+  <div class="container">
+    <p class="eyebrow eyebrow--center">Para Que Todo Salga Perfecto</p>
+    <h2 class="section-heading">Recomendaciones</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+
+    <ul class="recommend-list">
+      <li class="reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Te pedimos llegar 20 minutos antes del inicio de la ceremonia.</span>
+      </li>
+      <li class="reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Por favor sigue el código de vestimenta formal indicado arriba.</span>
+      </li>
+      <li class="reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Confirma tu asistencia antes de la fecha límite en el formulario de RSVP.</span>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -349,9 +465,21 @@
       </figure>
     </div>
 
-    <p class="hashtag-callout">Comparte tus fotos con<br><span>#ViridianaYFelipe2026</span></p>
+    <div class="hashtag-card reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 8h3l2-2h6l2 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z" stroke-linejoin="round"/><circle cx="12" cy="14" r="3.5"/></svg>
+      <p>Comparte tus fotos con el hashtag</p>
+      <p class="hashtag-tag">#ViridianaYFelipe2026</p>
+    </div>
   </div>
 </section>
+
+<!-- ============ LIGHTBOX (foto de galería en grande) ============ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Cerrar imagen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+</div>
 
 <!-- ============ BUENOS DESEOS ============ -->
 <section class="deseos" id="deseos">
@@ -362,8 +490,8 @@
     <blockquote class="vow" style="margin-inline:auto; text-align:left;">
       «Que este sea el comienzo de una vida llena de amor, risas y aventuras compartidas.»
     </blockquote>
-    <p class="section-intro">¿Quieres dejarnos unas palabras? Escríbelas en el mensaje del formulario de confirmación.</p>
-    <a class="btn btn-outline" href="#rsvp" style="margin-top: var(--space-md);">Ir al formulario</a>
+    <p class="section-intro">¿Quieres dejarnos unas palabras? Escríbelas en los comentarios del formulario de confirmación.</p>
+    <a class="btn btn-outline" href="rsvp.html" data-rsvp-link style="margin-top: var(--space-md);">Ir al formulario</a>
   </div>
 </section>
 
@@ -406,54 +534,14 @@
   </div>
 </section>
 
-<!-- ============ RSVP ============ -->
-<section class="rsvp" id="rsvp">
+<!-- ============ RSVP (llamado final; el formulario vive en rsvp.html) ============ -->
+<section class="rsvp-cta" id="confirmar">
   <div class="container rsvp-inner">
-    <p class="eyebrow eyebrow--center">Confírmanos</p>
-    <h2 class="section-heading">RSVP</h2>
+    <p class="eyebrow eyebrow--center">RSVP</p>
+    <h2 class="section-heading">Confirma tu Asistencia</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
-    <p class="rsvp-deadline">Por favor, confirma tu asistencia antes del 15 de Octubre de 2026.</p>
-
-    <form class="rsvp-form" id="rsvpForm" novalidate>
-      <div class="field">
-        <label for="fullName">Nombre completo</label>
-        <input type="text" id="fullName" name="fullName" placeholder="Escribe tu nombre aquí" required autocomplete="name">
-      </div>
-
-      <div class="field">
-        <label for="attending">¿Asistirás?</label>
-        <select id="attending" name="attending" required>
-          <option value="yes" selected>Sí, ahí estaré</option>
-          <option value="no">No podré asistir</option>
-        </select>
-      </div>
-
-      <div class="field field-collapsible" id="guestCountField">
-        <div class="field-collapsible-inner">
-          <label for="guestCount">Número de invitados</label>
-          <select id="guestCount" name="guestCount">
-            <option value="1" selected>1 Persona</option>
-            <option value="2">2 Personas</option>
-            <option value="3">3 Personas</option>
-            <option value="4">4 Personas</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="message">Mensaje para los novios</label>
-        <textarea id="message" name="message" placeholder="Opcional…"></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-solid" id="rsvpSubmit">Confirmar asistencia</button>
-      <p class="form-note" id="rsvpNote" role="status"></p>
-    </form>
-
-    <div class="rsvp-success" id="rsvpSuccess">
-      <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.9-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.8.8 6 3 2.2-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7C19.5 16.1 12 21 12 21Z"/></svg>
-      <h3>¡Gracias por confirmar!</h3>
-      <p>Hemos recibido tu respuesta. Nos vemos pronto ♥</p>
-    </div>
+    <p class="rsvp-deadline">Por favor, confírmanos antes del 15 de Octubre de 2026.</p>
+    <a class="btn btn-solid" href="rsvp.html" data-rsvp-link style="margin-top: var(--space-md);">Confirmar asistencia</a>
   </div>
 </section>
 
@@ -481,12 +569,69 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="3.2"/><path d="M22 21v-2a4 4 0 0 0-2.8-3.85M15.2 3.2a4 4 0 0 1 0 7.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     Padrinos
   </a>
-  <a href="#rsvp" data-nav-link data-bottom-nav>
+  <a href="rsvp.html" data-rsvp-link data-bottom-nav>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7.5-4.9-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.8.8 6 3 2.2-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7C19.5 16.1 12 21 12 21Z" stroke-linejoin="round"/></svg>
     RSVP
   </a>
 </nav>
 
+<!-- ============ RSVP (superposición: se abre sin salir de esta página,
+     así la música nunca se corta). rsvp.html existe aparte solo por si
+     alguien entra a esa dirección directo. ============ -->
+<div class="rsvp-overlay rsvp-standalone" id="rsvpOverlay" hidden>
+  <div class="rsvp-card">
+    <button class="rsvp-overlay-close" id="rsvpOverlayClose" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+    <div class="monogram"><span class="heart">♥</span> V &amp; F</div>
+    <p class="eyebrow eyebrow--center">RSVP</p>
+    <h2 class="section-heading">Confirmación de Asistencia</h2>
+    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+    <p class="rsvp-deadline">Por favor, confirma tu asistencia antes del 15 de Octubre de 2026.</p>
+
+    <form class="rsvp-form" id="rsvpForm" novalidate>
+      <div class="field">
+        <label for="fullName">Nombre</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Juan Pérez" required autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="attending">¿Asistirás?</label>
+        <select id="attending" name="attending" required>
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="yes">Sí, ahí estaré</option>
+          <option value="no">No podré asistir</option>
+        </select>
+      </div>
+
+      <div class="field field-collapsible is-hidden" id="guestCountField">
+        <div class="field-collapsible-inner">
+          <label for="guestCount">¿Cuántas personas asistirán?</label>
+          <select id="guestCount" name="guestCount">
+            <option value="1" selected>1 Persona</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Comentarios y Felicitaciones</label>
+        <textarea id="message" name="message" placeholder="Escribe tus felicitaciones o comentarios aquí…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-solid" id="rsvpSubmit">Confirmar</button>
+      <p class="form-note" id="rsvpNote" role="status"></p>
+    </form>
+
+    <div class="rsvp-success" id="rsvpSuccess">
+      <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.9-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.8.8 6 3 2.2-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7C19.5 16.1 12 21 12 21Z"/></svg>
+      <h3>¡Gracias por confirmar!</h3>
+      <p>Hemos recibido tu respuesta ♥</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/music.js"></script>
 <script src="js/main.js"></script>
+<script src="js/rsvp.js"></script>
 </body>
 </html>

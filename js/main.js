@@ -2,83 +2,289 @@
 // Viridiana & Felipe — lógica del sitio principal
 // ============================================================
 
+// ---------- Bloquear/restaurar el scroll sin saltar a la posición 0 ----------
+// (html tiene scroll-behavior: smooth, así que hay que apagarlo mientras
+// bloqueamos/restauramos, si no cualquier ajuste de scroll se ve animado)
+function lockScroll() {
+  const scrollY = window.scrollY;
+  document.documentElement.style.scrollBehavior = "auto";
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.documentElement.classList.add("no-scroll");
+}
+
+function unlockScroll() {
+  const scrollY = document.body.style.top;
+  document.documentElement.style.scrollBehavior = "auto";
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.documentElement.classList.remove("no-scroll");
+  window.scrollTo(0, scrollY ? -parseInt(scrollY, 10) : 0);
+  requestAnimationFrame(() => {
+    document.documentElement.style.scrollBehavior = "";
+  });
+}
+
 // ---------- Envelope gate (portada de apertura) ----------
 (function envelopeGate() {
   const gate = document.getElementById("envelopeGate");
   const seal = document.getElementById("waxSeal");
-  const card = document.getElementById("polaroidCard");
-  const heroMedia = document.getElementById("heroMedia");
+  const envelopeView = document.getElementById("envelopeView");
+  const letterCard = document.getElementById("letterCard");
+  const continueBtn = document.getElementById("continueBtn");
   if (!gate || !seal || gate.classList.contains("is-skipped")) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // FLIP: calcula exactamente cuánto debe moverse/escalarse la polaroid para
-  // terminar calzando sobre la foto de fondo real, en vez de crecer parejo
-  // desde su propio centro.
-  function setFlipTargets() {
-    if (!card || !heroMedia) return;
-    const from = card.getBoundingClientRect();
-    const to = heroMedia.getBoundingClientRect();
-
-    const scaleX = to.width / from.width;
-    const scaleY = to.height / from.height;
-    const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
-    const dy = (to.top + to.height / 2) - (from.top + from.height / 2);
-
-    card.style.setProperty("--flip-x", `${dx}px`);
-    card.style.setProperty("--flip-y", `${dy}px`);
-    card.style.setProperty("--flip-scale-x", scaleX);
-    card.style.setProperty("--flip-scale-y", scaleY);
-  }
-
+  // 1) Clic en el sello: el sello "revienta", las dos mitades del sobre se
+  //    separan hacia arriba/abajo, y la carta se revela DETRÁS mientras se abren.
   seal.addEventListener(
     "click",
     () => {
-      setFlipTargets();
       gate.classList.add("is-opening");
 
+      // la carta aparece justo cuando las mitades empiezan a separarse,
+      // para que sea el propio sobre el que la va descubriendo
       setTimeout(() => {
-        gate.classList.add("is-closing");
+        if (letterCard) {
+          letterCard.hidden = false;
+          requestAnimationFrame(() => letterCard.classList.add("is-visible"));
+        }
+      }, reduced ? 50 : 1000);
 
-        setTimeout(() => {
-          gate.style.display = "none";
-          document.documentElement.classList.remove("gate-lock");
-          sessionStorage.setItem("envelopeOpened", "1");
-        }, reduced ? 200 : 650);
-      }, reduced ? 50 : 1400);
+      // cuando las mitades ya salieron de pantalla, se retira el sobre
+      setTimeout(() => {
+        if (envelopeView) envelopeView.style.display = "none";
+      }, reduced ? 100 : 3600);
+    },
+    { once: true }
+  );
+
+  // 2) Clic en "Confirmar asistencia": se retira el sobre y se abre el RSVP
+  //    como superposición dentro de esta misma página (sin navegar), para
+  //    que la música no se corte ni un instante.
+  continueBtn?.addEventListener(
+    "click",
+    () => {
+      sessionStorage.setItem("envelopeOpened", "1");
+      gate.style.display = "none";
+      window.openRsvpOverlay?.();
     },
     { once: true }
   );
 })();
 
-// ---------- Countdown ----------
+// ---------- RSVP: superposición dentro de la página (no navega, así la
+// música nunca se corta). rsvp.html sigue existiendo como respaldo por si
+// alguien entra a esa dirección directo. ----------
+(function rsvpOverlay() {
+  const overlay = document.getElementById("rsvpOverlay");
+  if (!overlay) return;
+
+  const closeBtn = document.getElementById("rsvpOverlayClose");
+
+  function openOverlay(pushState) {
+    overlay.hidden = false;
+    if (!document.documentElement.classList.contains("no-scroll")) lockScroll();
+    requestAnimationFrame(() => overlay.classList.add("is-visible"));
+    if (pushState) history.pushState({ rsvp: true }, "", "rsvp.html");
+  }
+
+  function closeOverlay(pushState) {
+    overlay.classList.remove("is-visible");
+    unlockScroll();
+    setTimeout(() => { overlay.hidden = true; }, 450);
+    if (pushState) history.pushState({ rsvp: false }, "", "index.html");
+  }
+
+  window.openRsvpOverlay = () => openOverlay(true);
+  window.closeRsvpOverlay = () => closeOverlay(true);
+
+  closeBtn?.addEventListener("click", () => closeOverlay(true));
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) closeOverlay(true);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && overlay.classList.contains("is-visible")) closeOverlay(true);
+  });
+
+  document.querySelectorAll("[data-rsvp-link]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openOverlay(true);
+    });
+  });
+
+  window.addEventListener("popstate", () => {
+    if (window.location.href.includes("rsvp.html")) openOverlay(false);
+    else closeOverlay(false);
+  });
+})();
+
+// (La música de fondo vive en js/music.js — se comparte con rsvp.html
+// para que no se corte al navegar entre páginas)
+
+// ---------- Galería: lightbox con transición FLIP (crece desde la miniatura) ----------
+(function galleryLightbox() {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const closeBtn = document.getElementById("lightboxClose");
+  const thumbs = document.querySelectorAll(".gallery-item img");
+  if (!lightbox || !lightboxImg || !thumbs.length) return;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const FLIGHT_MS = 400;
+  let originThumb = null;
+  let closeTimer = null;
+
+  // dónde y de qué tamaño se verá la foto ya centrada, respetando su
+  // proporción real (misma lógica que el max-width/max-height del CSS)
+  function centeredRect(naturalW, naturalH) {
+    const maxW = Math.min(900, window.innerWidth * 0.92);
+    const maxH = window.innerHeight * 0.85;
+    const ratio = Math.min(maxW / naturalW, maxH / naturalH, 1);
+    const width = naturalW * ratio;
+    const height = naturalH * ratio;
+    return {
+      width,
+      height,
+      left: (window.innerWidth - width) / 2,
+      top: (window.innerHeight - height) / 2,
+    };
+  }
+
+  function placeAt(rect) {
+    lightboxImg.style.top = `${rect.top}px`;
+    lightboxImg.style.left = `${rect.left}px`;
+    lightboxImg.style.width = `${rect.width}px`;
+    lightboxImg.style.height = `${rect.height}px`;
+  }
+
+  function openLightbox(img) {
+    if (img.closest(".photo-slot")?.classList.contains("is-missing")) return;
+    clearTimeout(closeTimer);
+    originThumb = img;
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt || "";
+    lockScroll();
+    lightbox.classList.add("is-visible");
+
+    if (reduced) return;
+
+    const from = img.getBoundingClientRect();
+    lightboxImg.classList.add("is-flying");
+    lightboxImg.style.transition = "none";
+    placeAt(from);
+    void lightboxImg.offsetWidth; // reflow: registra el punto de partida antes de animar
+    lightboxImg.style.transition = "";
+
+    const to = centeredRect(img.naturalWidth || from.width, img.naturalHeight || from.height);
+    requestAnimationFrame(() => placeAt(to));
+  }
+
+  function closeLightbox() {
+    if (!lightbox.classList.contains("is-visible")) return;
+    unlockScroll();
+    // quitar is-visible ya arranca el fundido del fondo; el vuelo de
+    // regreso corre en paralelo, así que ambos terminan juntos
+    lightbox.classList.remove("is-visible");
+
+    if (reduced || !originThumb) {
+      finishClose();
+      return;
+    }
+
+    placeAt(originThumb.getBoundingClientRect());
+    closeTimer = setTimeout(finishClose, FLIGHT_MS);
+  }
+
+  function finishClose() {
+    lightboxImg.classList.remove("is-flying");
+    lightboxImg.removeAttribute("style");
+    originThumb = null;
+  }
+
+  thumbs.forEach((img) => img.addEventListener("click", () => openLightbox(img)));
+  closeBtn.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox.classList.contains("is-visible")) closeLightbox();
+  });
+})();
+
+// ---------- Countdown (soporta varios widgets .countdown en la página) ----------
 (function countdown() {
   const heroEl = document.getElementById("inicio");
   const target = new Date(heroEl.dataset.weddingDate).getTime();
-  const els = {
-    days: document.querySelector('[data-unit="days"]'),
-    hours: document.querySelector('[data-unit="hours"]'),
-    minutes: document.querySelector('[data-unit="minutes"]'),
-  };
+  const widgets = document.querySelectorAll(".countdown");
+  if (!widgets.length) return;
+
+  function setUnit(widget, unit, value) {
+    const el = widget.querySelector(`[data-unit="${unit}"]`);
+    if (el) el.textContent = String(value).padStart(2, "0");
+  }
 
   function tick() {
     const diff = target - Date.now();
-    if (diff <= 0) {
-      els.days.textContent = "00";
-      els.hours.textContent = "00";
-      els.minutes.textContent = "00";
-      return;
-    }
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    els.days.textContent = String(days).padStart(2, "0");
-    els.hours.textContent = String(hours).padStart(2, "0");
-    els.minutes.textContent = String(minutes).padStart(2, "0");
+    const days = diff > 0 ? Math.floor(diff / (1000 * 60 * 60 * 24)) : 0;
+    const hours = diff > 0 ? Math.floor((diff / (1000 * 60 * 60)) % 24) : 0;
+    const minutes = diff > 0 ? Math.floor((diff / (1000 * 60)) % 60) : 0;
+    const seconds = diff > 0 ? Math.floor((diff / 1000) % 60) : 0;
+
+    widgets.forEach((widget) => {
+      setUnit(widget, "days", days);
+      setUnit(widget, "hours", hours);
+      setUnit(widget, "minutes", minutes);
+      setUnit(widget, "seconds", seconds);
+    });
   }
 
   tick();
-  setInterval(tick, 1000 * 30);
+  setInterval(tick, 1000);
+})();
+
+// ---------- Agregar a calendario (.ics) ----------
+(function addToCalendar() {
+  const btn = document.getElementById("addToCalendarBtn");
+  const heroEl = document.getElementById("inicio");
+  if (!btn || !heroEl) return;
+
+  function toICSDate(date) {
+    return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  }
+
+  btn.addEventListener("click", () => {
+    const start = new Date(heroEl.dataset.weddingDate);
+    const end = new Date(start.getTime() + 6 * 60 * 60 * 1000);
+
+    const ics = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      `DTSTART:${toICSDate(start)}`,
+      `DTEND:${toICSDate(end)}`,
+      "SUMMARY:Boda de Viridiana & Felipe",
+      "LOCATION:Villa de las Flores\\, Antigua\\, Guatemala",
+      "DESCRIPTION:¡Nos casamos! Acompáñanos a celebrar.",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const blob = new Blob([ics], { type: "text/calendar" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "boda-viridiana-felipe.ics";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(link.href);
+  });
 })();
 
 // ---------- Header: solid background after scrolling past hero ----------
@@ -124,7 +330,6 @@
     "deseos",
     "canciones",
     "contactos",
-    "rsvp",
   ]
     .map((id) => document.getElementById(id))
     .filter(Boolean);
@@ -166,60 +371,4 @@
   revealEls.forEach((el) => observer.observe(el));
 })();
 
-// ---------- RSVP form ----------
-(function rsvpForm() {
-  const form = document.getElementById("rsvpForm");
-  if (!form) return;
-
-  const attendingSelect = document.getElementById("attending");
-  const guestCountField = document.getElementById("guestCountField");
-  const submitBtn = document.getElementById("rsvpSubmit");
-  const note = document.getElementById("rsvpNote");
-  const successEl = document.getElementById("rsvpSuccess");
-
-  attendingSelect.addEventListener("change", () => {
-    const attending = attendingSelect.value === "yes";
-    guestCountField.classList.toggle("is-hidden", !attending);
-  });
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    note.textContent = "";
-    note.className = "form-note";
-
-    const fullName = form.fullName.value.trim();
-    if (!fullName) {
-      note.textContent = "Por favor escribe tu nombre.";
-      note.classList.add("error");
-      return;
-    }
-
-    const attending = form.attending.value === "yes";
-    const payload = {
-      fullName,
-      attending,
-      guestCount: attending ? Number(form.guestCount.value) : 0,
-      message: form.message.value.trim(),
-    };
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Enviando…";
-
-    try {
-      const res = await fetch("/api/rsvp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("request-failed");
-
-      form.hidden = true;
-      successEl.classList.add("is-visible");
-    } catch (err) {
-      note.textContent = "No pudimos enviar tu confirmación. Intenta de nuevo en un momento.";
-      note.classList.add("error");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Confirmar asistencia";
-    }
-  });
-})();
+// (El formulario de RSVP vive en rsvp.html con su propia lógica: js/rsvp.js)

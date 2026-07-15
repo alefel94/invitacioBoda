@@ -14,6 +14,16 @@ const statResponses = document.getElementById("statResponses");
 const statGuests = document.getElementById("statGuests");
 const statDeclined = document.getElementById("statDeclined");
 
+const tabResponsesBtn = document.getElementById("tabResponsesBtn");
+const tabGuestsBtn = document.getElementById("tabGuestsBtn");
+const panelResponses = document.getElementById("panelResponses");
+const panelGuests = document.getElementById("panelGuests");
+const guestsTableContainer = document.getElementById("guestsTableContainer");
+const statGuestTotal = document.getElementById("statGuestTotal");
+const statTicketsUsed = document.getElementById("statTicketsUsed");
+const statTicketsTotal = document.getElementById("statTicketsTotal");
+const statPending = document.getElementById("statPending");
+
 function showLogin() {
   loginScreen.hidden = false;
   dashboard.hidden = true;
@@ -88,6 +98,97 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// ---------- Pestañas ----------
+function showTab(tab) {
+  const isGuests = tab === "guests";
+  tabResponsesBtn.classList.toggle("is-active", !isGuests);
+  tabGuestsBtn.classList.toggle("is-active", isGuests);
+  panelResponses.hidden = isGuests;
+  panelGuests.hidden = !isGuests;
+  if (isGuests) loadGuests();
+}
+tabResponsesBtn.addEventListener("click", () => showTab("responses"));
+tabGuestsBtn.addEventListener("click", () => showTab("guests"));
+
+// ---------- Invitados (tu lista precargada con boletos y su estado) ----------
+function renderGuests(guests) {
+  const totalTickets = guests.reduce((sum, g) => sum + Number(g.allowed_guests || 0), 0);
+  const usedTickets = guests.reduce((sum, g) => sum + (g.status === "confirmado" ? Number(g.guest_count || 0) : 0), 0);
+  const pending = guests.filter((g) => g.status === "pendiente").length;
+
+  statGuestTotal.textContent = guests.length;
+  statTicketsUsed.textContent = usedTickets;
+  statTicketsTotal.textContent = totalTickets;
+  statPending.textContent = pending;
+
+  if (guests.length === 0) {
+    guestsTableContainer.innerHTML = `<p class="admin-empty">Todavía no cargas tu lista de invitados. Sigue las instrucciones de <code>schema.sql</code> para agregarlos.</p>`;
+    return;
+  }
+
+  const statusLabel = { confirmado: "Confirmado", "no asiste": "No asiste", pendiente: "Pendiente" };
+  const statusClass = { confirmado: "yes", "no asiste": "no", pendiente: "pending" };
+
+  const rows = guests
+    .map((g) => {
+      const link = `${window.location.origin}/rsvp.html?invite=${encodeURIComponent(g.invite_code)}`;
+      return `
+      <tr>
+        <td>${escapeHtml(g.display_name)}${g.guest_group ? `<br><span style="color:var(--color-ink-faint); font-size:0.78em;">${escapeHtml(g.guest_group)}</span>` : ""}</td>
+        <td><span class="status-pill ${statusClass[g.status] || "pending"}">${statusLabel[g.status] || g.status}</span></td>
+        <td>${g.status === "confirmado" ? g.guest_count : "—"} / ${g.allowed_guests}</td>
+        <td>${g.message ? escapeHtml(g.message) : "—"}</td>
+        <td><button class="copy-link-btn" data-link="${link}" type="button">Copiar link</button></td>
+      </tr>`;
+    })
+    .join("");
+
+  guestsTableContainer.innerHTML = `
+    <div class="table-wrap">
+      <table class="rsvp-table">
+        <thead>
+          <tr>
+            <th>Invitación</th>
+            <th>Estado</th>
+            <th>Boletos</th>
+            <th>Mensaje</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+
+  guestsTableContainer.querySelectorAll(".copy-link-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.link);
+        const original = btn.textContent;
+        btn.textContent = "¡Copiado!";
+        setTimeout(() => { btn.textContent = original; }, 1500);
+      } catch (err) {
+        /* portapapeles no disponible; sin problema, el botón solo no hace nada */
+      }
+    });
+  });
+}
+
+async function loadGuests() {
+  guestsTableContainer.innerHTML = `<p class="admin-loading">Cargando invitados…</p>`;
+  try {
+    const res = await fetch("/api/guests", { credentials: "same-origin" });
+    if (res.status === 401) {
+      showLogin();
+      return;
+    }
+    if (!res.ok) throw new Error("request-failed");
+    const data = await res.json();
+    renderGuests(data.guests || []);
+  } catch (err) {
+    guestsTableContainer.innerHTML = `<p class="admin-error">No se pudo cargar la lista de invitados. Intenta de nuevo.</p>`;
+  }
+}
+
 async function loadRsvps() {
   tableContainer.innerHTML = `<p class="admin-loading">Cargando confirmaciones…</p>`;
   try {
@@ -137,7 +238,10 @@ loginForm.addEventListener("submit", async (event) => {
   }
 });
 
-refreshBtn.addEventListener("click", loadRsvps);
+refreshBtn.addEventListener("click", () => {
+  if (panelGuests.hidden) loadRsvps();
+  else loadGuests();
+});
 
 logoutBtn.addEventListener("click", async () => {
   await fetch("/api/admin-logout", { method: "POST" });
