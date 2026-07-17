@@ -95,7 +95,7 @@
         <p>Por eso, queremos que nos acompañen en uno de los días más importantes de nuestras vidas. Su presencia hará que esta celebración sea aún más especial, porque no solo son nuestros invitados, sino personas muy significativas para nosotros.</p>
         <p>Gracias por formar parte de nuestro camino. Será un honor compartir con ustedes este momento tan especial.</p>
         <p class="letter-signoff">Con todo nuestro amor,<span class="letter-names">Viridiana &amp; Felipe</span></p>
-        <button class="btn btn-solid" id="continueBtn" type="button">Confirmar asistencia</button>
+        <button class="btn btn-solid" id="continueBtn" type="button">Continuar</button>
       </div>
     </div>
   </div>
@@ -128,8 +128,6 @@
   <a href="#vestimenta" data-nav-link>Código de Vestimenta</a>
   <a href="#regalos" data-nav-link>Mesa de Regalos</a>
   <a href="#galeria" data-nav-link>Galería</a>
-  <a href="#deseos" data-nav-link>Buenos Deseos</a>
-  <a href="#canciones" data-nav-link>Canciones</a>
   <a href="#contactos" data-nav-link>Contactos</a>
   <a href="rsvp.html" data-rsvp-link>RSVP</a>
 </nav>
@@ -270,26 +268,38 @@
     <h2 class="section-heading">Ubicaciones</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
 
-    <div class="ubicaciones-cards">
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+    <div class="venues">
+      <div class="venue reveal">
+        <span class="venue-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        </span>
         <p class="detail-label">Ceremonia</p>
-        <p class="detail-value">Iglesia San Francisco<br>Antigua, Guatemala</p>
+        <p class="venue-name">Iglesia San Francisco</p>
+        <p class="venue-address">Antigua, Guatemala</p>
         <p class="detail-time">7:30 PM</p>
-        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+San+Francisco+Antigua+Guatemala" target="_blank" rel="noopener">
+        <a class="venue-link" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+San+Francisco+Antigua+Guatemala" target="_blank" rel="noopener">
           Ver mapa
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
 
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+      <div class="venue-connector" aria-hidden="true">
+        <span class="venue-connector-line"></span>
+        <span class="venue-connector-dot">✦</span>
+        <span class="venue-connector-line"></span>
+      </div>
+
+      <div class="venue reveal">
+        <span class="venue-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        </span>
         <p class="detail-label">Recepción</p>
-        <p class="detail-value">Villa de las Flores<br>Antigua, Guatemala</p>
+        <p class="venue-name">Villa de las Flores</p>
+        <p class="venue-address">Antigua, Guatemala</p>
         <p class="detail-time">8:30 PM</p>
-        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Villa+de+las+Flores+Antigua+Guatemala" target="_blank" rel="noopener">
+        <a class="venue-link" href="https://www.google.com/maps/search/?api=1&amp;query=Villa+de+las+Flores+Antigua+Guatemala" target="_blank" rel="noopener">
           Ver mapa
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
@@ -399,7 +409,7 @@
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
     <p class="section-intro">Tu presencia es el regalo más importante para nosotros. Si deseas obsequiarnos algo más, aquí tienes un par de opciones.</p>
 
-    <div class="ubicaciones-cards">
+    <div class="detail-grid">
       <div class="detail-card reveal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
         <p class="detail-label">Lluvia de Sobres</p>
@@ -425,39 +435,45 @@
     <p class="eyebrow eyebrow--center">Momentos</p>
     <h2 class="section-heading">Galería</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
+  </div>
 
-    <div class="gallery-grid">
-      <figure class="photo-slot gallery-item reveal">
+  <div class="gallery-carousel reveal" id="galleryCarousel">
+    <button class="gallery-arrow gallery-arrow-prev" id="galleryPrev" type="button" aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="gallery-track" id="galleryTrack" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Galería de fotos">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="0">
         <img src="assets/images/gallery-1.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
         <span class="photo-placeholder-text"><code>gallery-1.jpg</code></span>
       </figure>
-      <figure class="photo-slot gallery-item reveal">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="1">
         <img src="assets/images/gallery-2.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
         <span class="photo-placeholder-text"><code>gallery-2.jpg</code></span>
       </figure>
-      <figure class="photo-slot gallery-item reveal">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="2">
         <img src="assets/images/gallery-3.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
         <span class="photo-placeholder-text"><code>gallery-3.jpg</code></span>
       </figure>
-      <figure class="photo-slot gallery-item reveal">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="3">
         <img src="assets/images/gallery-4.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
         <span class="photo-placeholder-text"><code>gallery-4.jpg</code></span>
       </figure>
-      <figure class="photo-slot gallery-item reveal">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="4">
         <img src="assets/images/gallery-5.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
         <span class="photo-placeholder-text"><code>gallery-5.jpg</code></span>
       </figure>
-      <figure class="photo-slot gallery-item reveal">
+      <figure class="photo-slot gallery-item gallery-slide" data-index="5">
         <img src="assets/images/gallery-6.jpg" alt=""
              onerror="this.closest('.photo-slot').classList.add('is-missing')"
              onload="this.closest('.photo-slot').classList.remove('is-missing')">
@@ -465,12 +481,20 @@
       </figure>
     </div>
 
-    <div class="hashtag-card reveal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 8h3l2-2h6l2 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z" stroke-linejoin="round"/><circle cx="12" cy="14" r="3.5"/></svg>
-      <p>Comparte tus fotos con el hashtag</p>
-      <p class="hashtag-tag">#ViridianaYFelipe2026</p>
-    </div>
+    <button class="gallery-arrow gallery-arrow-next" id="galleryNext" type="button" aria-label="Foto siguiente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </div>
+
+  <div class="gallery-dots" id="galleryDots" role="tablist" aria-label="Seleccionar foto">
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 1" data-index="0"></button>
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 2" data-index="1"></button>
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 3" data-index="2"></button>
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 4" data-index="3"></button>
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 5" data-index="4"></button>
+    <button class="gallery-dot" type="button" role="tab" aria-label="Ir a la foto 6" data-index="5"></button>
+  </div>
+
 </section>
 
 <!-- ============ LIGHTBOX (foto de galería en grande) ============ -->
@@ -481,34 +505,6 @@
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
 </div>
 
-<!-- ============ BUENOS DESEOS ============ -->
-<section class="deseos" id="deseos">
-  <div class="container rsvp-inner">
-    <p class="eyebrow eyebrow--center">Tu Mensaje</p>
-    <h2 class="section-heading">Buenos Deseos</h2>
-    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
-    <blockquote class="vow" style="margin-inline:auto; text-align:left;">
-      «Que este sea el comienzo de una vida llena de amor, risas y aventuras compartidas.»
-    </blockquote>
-    <p class="section-intro">¿Quieres dejarnos unas palabras? Escríbelas en los comentarios del formulario de confirmación.</p>
-    <a class="btn btn-outline" href="rsvp.html" data-rsvp-link style="margin-top: var(--space-md);">Ir al formulario</a>
-  </div>
-</section>
-
-<!-- ============ SUGERENCIA DE CANCIONES ============ -->
-<section class="canciones" id="canciones">
-  <div class="container rsvp-inner">
-    <p class="eyebrow eyebrow--center">Que No Falte</p>
-    <h2 class="section-heading">Sugerencia de Canciones</h2>
-    <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
-    <p class="section-intro">Ayúdanos a armar el playlist de la fiesta — agrega tus canciones favoritas a nuestra lista colaborativa.</p>
-    <a class="btn btn-solid" href="https://open.spotify.com/playlist/TU-PLAYLIST-AQUI" target="_blank" rel="noopener" style="margin-top: var(--space-md);">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-      Abrir playlist
-    </a>
-  </div>
-</section>
-
 <!-- ============ CONTACTOS ============ -->
 <section class="contactos" id="contactos">
   <div class="container">
@@ -516,7 +512,7 @@
     <h2 class="section-heading">Contactos</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
 
-    <div class="ubicaciones-cards">
+    <div class="detail-grid">
       <div class="detail-card reveal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <p class="detail-label">Organización</p>

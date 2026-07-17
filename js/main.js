@@ -64,15 +64,14 @@ function unlockScroll() {
     { once: true }
   );
 
-  // 2) Clic en "Confirmar asistencia": se retira el sobre y se abre el RSVP
-  //    como superposición dentro de esta misma página (sin navegar), para
-  //    que la música no se corte ni un instante.
+  // 2) Clic en "Continuar": se retira el sobre y se revela la landing page.
+  //    El RSVP ya no se abre aquí — vive al final de la página, como antes.
   continueBtn?.addEventListener(
     "click",
     () => {
       sessionStorage.setItem("envelopeOpened", "1");
       gate.style.display = "none";
-      window.openRsvpOverlay?.();
+      document.documentElement.classList.remove("no-scroll");
     },
     { once: true }
   );
@@ -218,6 +217,106 @@ function unlockScroll() {
   });
 })();
 
+// ---------- Galería: carrusel con autoplay, flechas, dots y swipe ----------
+(function galleryCarousel() {
+  const track = document.getElementById("galleryTrack");
+  const slides = Array.from(document.querySelectorAll(".gallery-slide"));
+  const dots = Array.from(document.querySelectorAll(".gallery-dot"));
+  const prevBtn = document.getElementById("galleryPrev");
+  const nextBtn = document.getElementById("galleryNext");
+  const lightbox = document.getElementById("lightbox");
+  if (!track || !slides.length) return;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const AUTOPLAY_MS = 4200;
+  const RESUME_DELAY_MS = 5000;
+
+  let activeIndex = 0;
+  let autoplayTimer = null;
+  let resumeTimer = null;
+  let sectionVisible = true;
+
+  function setActive(index) {
+    activeIndex = index;
+    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === index));
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("is-active", i === index);
+      dot.setAttribute("aria-selected", i === index ? "true" : "false");
+    });
+  }
+
+  function goTo(index) {
+    const target = slides[(index + slides.length) % slides.length];
+    target.scrollIntoView({ behavior: reduced ? "auto" : "smooth", inline: "center", block: "nearest" });
+  }
+
+  function next() { goTo(activeIndex + 1); }
+  function prev() { goTo(activeIndex - 1); }
+
+  function stopAutoplay() {
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  function startAutoplay() {
+    if (reduced || autoplayTimer) return;
+    autoplayTimer = setInterval(() => {
+      if (!sectionVisible || document.hidden) return;
+      if (lightbox?.classList.contains("is-visible")) return;
+      next();
+    }, AUTOPLAY_MS);
+  }
+
+  function pauseAndScheduleResume() {
+    stopAutoplay();
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(startAutoplay, RESUME_DELAY_MS);
+  }
+
+  // qué foto está centrada — cubre autoplay, flechas, dots y swipe manual a la vez
+  const slideObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          setActive(Number(entry.target.dataset.index));
+        }
+      });
+    },
+    { root: track, threshold: [0.6] }
+  );
+  slides.forEach((slide) => slideObserver.observe(slide));
+
+  // solo reproduce mientras la galería está visible en pantalla
+  const sectionObserver = new IntersectionObserver(
+    ([entry]) => { sectionVisible = entry.isIntersecting; },
+    { threshold: 0.2 }
+  );
+  sectionObserver.observe(track);
+
+  prevBtn?.addEventListener("click", () => { prev(); pauseAndScheduleResume(); });
+  nextBtn?.addEventListener("click", () => { next(); pauseAndScheduleResume(); });
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => { goTo(Number(dot.dataset.index)); pauseAndScheduleResume(); });
+  });
+
+  track.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") { next(); pauseAndScheduleResume(); }
+    if (event.key === "ArrowLeft") { prev(); pauseAndScheduleResume(); }
+  });
+
+  ["pointerdown", "wheel"].forEach((type) => {
+    track.addEventListener(type, pauseAndScheduleResume, { passive: true });
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAutoplay();
+    else startAutoplay();
+  });
+
+  setActive(0);
+  startAutoplay();
+})();
+
 // ---------- Countdown (soporta varios widgets .countdown en la página) ----------
 (function countdown() {
   const heroEl = document.getElementById("inicio");
@@ -327,8 +426,6 @@ function unlockScroll() {
     "vestimenta",
     "regalos",
     "galeria",
-    "deseos",
-    "canciones",
     "contactos",
   ]
     .map((id) => document.getElementById(id))

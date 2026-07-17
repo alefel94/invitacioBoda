@@ -80,8 +80,6 @@ Todo el texto (nombres, fecha, lugar, historia) está directamente en `index.htm
 - **Lugares, direcciones y links de "Ver mapa"**: sección `#ubicaciones` (una tarjeta por venue — ceremonia y recepción).
 - **Padrinos**: sección `#padrinos`, edita el nombre en cada tarjeta.
 - **Datos bancarios / lluvia de sobres**: sección `#regalos`.
-- **Link del playlist colaborativo**: atributo `href` del botón "Abrir playlist" en `#canciones` (reemplaza `TU-PLAYLIST-AQUI`).
-- **Hashtag**: texto dentro de `.hashtag-callout` en `#galeria`.
 - **Contactos / WhatsApp**: sección `#contactos` (cambia el número en cada link `https://wa.me/...`).
 - **Fecha límite de RSVP**: texto plano en la sección `#confirmar` de `index.html` y en `rsvp.html`.
 
