@@ -369,7 +369,7 @@ function unlockScroll() {
       `DTSTART:${toICSDate(start)}`,
       `DTEND:${toICSDate(end)}`,
       "SUMMARY:Boda de Viridiana & Felipe",
-      "LOCATION:Villa de las Flores\\, Antigua\\, Guatemala",
+      "LOCATION:Quinta Majam\\, Lindavista\\, Villas de Monticello\\, Zapopan\\, Jal.",
       "DESCRIPTION:¡Nos casamos! Acompáñanos a celebrar.",
       "END:VEVENT",
       "END:VCALENDAR",

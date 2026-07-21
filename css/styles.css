@@ -120,6 +120,16 @@ body::before {
 .divider-motif::after { background: linear-gradient(90deg, currentColor, transparent); }
 .divider-motif span { font-size: 0.7rem; line-height: 1; }
 
+/* secciones en banda musgo (fondo cream-soft): el acento cambia de
+   bronce a musgo para que el scroll alterne de ánimo, no solo de tono */
+.itinerario .eyebrow, .itinerario .divider-motif,
+.padres .eyebrow, .padres .divider-motif,
+.vestimenta .eyebrow, .vestimenta .divider-motif,
+.regalos .eyebrow, .regalos .divider-motif,
+.contactos .eyebrow, .contactos .divider-motif {
+  color: var(--color-blush-deep);
+}
+
 /* ---------- reveal-on-scroll ---------- */
 .reveal {
   opacity: 0;
@@ -339,7 +349,7 @@ body::before {
 .quote-band {
   padding-block: var(--space-xl);
   text-align: center;
-  background: var(--color-cream-soft);
+  background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%);
 }
 .quote-band-text {
   max-width: 34ch;
@@ -442,40 +452,56 @@ blockquote.vow {
 .itinerario {
   padding-block: var(--space-xl) var(--space-2xl);
   text-align: center;
+  background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%);
 }
 
 .timeline {
+  position: relative;
   margin: var(--space-xl) auto 0;
-  max-width: 420px;
-  text-align: left;
+  max-width: 460px;
+  list-style: none;
+  padding: 0;
 }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.14);
+  transform: translateX(-50%);
+}
+
 .timeline-item {
   position: relative;
-  padding-left: 2.4rem;
+  width: 50%;
   padding-bottom: var(--space-lg);
 }
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-item:nth-child(odd) {
+  padding-right: 1.6rem;
+  text-align: right;
+}
+.timeline-item:nth-child(even) {
+  margin-left: 50%;
+  padding-left: 1.6rem;
+  text-align: left;
+}
+
+/* "corta" la línea central a la altura de cada horario */
 .timeline-item::before {
   content: "";
   position: absolute;
-  left: 0.3rem;
-  top: 0.35rem;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-rose);
-  box-shadow: 0 0 0 4px var(--color-cream);
+  top: 0.05rem;
+  width: 20px;
+  height: 20px;
+  background: var(--color-cream-soft);
+  z-index: 1;
 }
-.timeline-item::after {
-  content: "";
-  position: absolute;
-  left: 0.5rem;
-  top: 1.1rem;
-  bottom: 0;
-  width: 1px;
-  background: rgba(0, 0, 0, 0.14);
-}
-.timeline-item:last-child { padding-bottom: 0; }
-.timeline-item:last-child::after { display: none; }
+.timeline-item:nth-child(odd)::before { right: -10px; }
+.timeline-item:nth-child(even)::before { left: -10px; }
 
 .timeline-time {
   display: block;
@@ -487,8 +513,28 @@ blockquote.vow {
 }
 .timeline-title { color: var(--color-ink); }
 
+/* aparición progresiva al hacer scroll, deslizando hacia su lado.
+   Como los 6 horarios caben en una sola pantalla, suelen cruzar el
+   umbral de visibilidad casi juntos: el transition-delay escalonado
+   fuerza que se vean en cascada aunque eso pase. */
+.timeline-item.reveal {
+  transition: opacity 0.6s var(--ease-editorial), transform 0.6s var(--ease-editorial);
+}
+.timeline-item:nth-child(odd).reveal { transform: translateX(-26px); }
+.timeline-item:nth-child(even).reveal { transform: translateX(26px); }
+.timeline-item.reveal.is-visible { transform: translateX(0); }
+
+.timeline-item:nth-child(1).reveal { transition-delay: 0s; }
+.timeline-item:nth-child(2).reveal { transition-delay: 0.12s; }
+.timeline-item:nth-child(3).reveal { transition-delay: 0.24s; }
+.timeline-item:nth-child(4).reveal { transition-delay: 0.36s; }
+.timeline-item:nth-child(5).reveal { transition-delay: 0.48s; }
+.timeline-item:nth-child(6).reveal { transition-delay: 0.6s; }
+
 /* =========================================================
-   UBICACIONES / PADRES / PADRINOS (reutilizan .detail-card)
+   UBICACIONES / PADRES / PADRINOS / REGALOS / CONTACTOS
+   Sin cajas ni sombras: insignias circulares, tipografía y líneas
+   finas — el mismo lenguaje editorial en toda la página.
    ========================================================= */
 .ubicaciones,
 .padres,
@@ -496,16 +542,14 @@ blockquote.vow {
   padding-block: var(--space-xl) var(--space-2xl);
   text-align: center;
 }
+.padres { background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
 
-.detail-grid,
-.padrinos-grid,
 .padres-grid {
   margin-top: var(--space-xl);
   display: grid;
   gap: var(--space-md);
 }
 @media (min-width: 640px) {
-  .detail-grid,
   .padres-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-lg);
@@ -513,9 +557,6 @@ blockquote.vow {
     margin-inline: auto;
     margin-top: var(--space-xl);
   }
-}
-@media (min-width: 768px) {
-  .padrinos-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-lg); }
 }
 
 .detail-time {
@@ -525,13 +566,15 @@ blockquote.vow {
   margin-top: 0.4em;
 }
 
-/* ---------- ubicaciones: sin cards, formato editorial con conector ---------- */
-.venues {
+/* ---------- insignia circular + conector, compartidos por ubicaciones/regalos/contactos ---------- */
+.venues,
+.options {
   margin: var(--space-xl) auto 0;
   max-width: 360px;
   text-align: center;
 }
-.venue-marker {
+.venue-marker,
+.option-marker {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -541,59 +584,53 @@ blockquote.vow {
   color: var(--color-rose);
   margin-bottom: var(--space-sm);
 }
-.venue-marker svg { width: 20px; height: 20px; }
-.venue-name {
+.venue-marker svg,
+.option-marker svg { width: 20px; height: 20px; }
+.venue-name,
+.option-title {
   font-family: var(--font-display);
   font-size: 1.3rem;
   color: var(--color-ink);
   margin-top: 0.15em;
 }
-.venue-address { color: var(--color-ink-soft); margin-top: 0.1em; }
-.venue-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45em;
-  margin-top: var(--space-sm);
-  padding-bottom: 0.2em;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ink);
-  border-bottom: 1px solid var(--color-ink);
-  transition: color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+.venue-address,
+.option-text {
+  color: var(--color-ink-soft);
+  margin-top: 0.1em;
 }
-.venue-link:hover { color: var(--color-rose); border-color: var(--color-rose); gap: 0.65em; }
+.option-text { line-height: 1.7; }
+.venue-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: var(--space-md);
+}
+.venue-links .btn { padding: 0.65em 1.3em; font-size: 0.7rem; }
 
-.venue-connector {
+.venue-connector,
+.option-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
   margin-block: var(--space-lg);
 }
-.venue-connector-line {
+.venue-connector-line,
+.option-connector-line {
   width: 1px;
   height: 30px;
   background: linear-gradient(to bottom, transparent, var(--color-blush-deep));
 }
-.venue-connector-line + .venue-connector-dot + .venue-connector-line {
+.venue-connector-line + .venue-connector-dot + .venue-connector-line,
+.option-connector-line + .option-connector-dot + .option-connector-line {
   background: linear-gradient(to top, transparent, var(--color-blush-deep));
 }
-.venue-connector-dot { color: var(--color-rose); font-size: 0.7rem; line-height: 1; }
+.venue-connector-dot,
+.option-connector-dot { color: var(--color-rose); font-size: 0.7rem; line-height: 1; }
 
-.detail-card {
-  background: var(--color-white);
-  border: 1px solid rgba(59,42,44,0.08);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg) var(--space-md);
-  box-shadow: var(--shadow-card);
-  text-align: center;
-}
-.detail-card svg {
-  width: 26px; height: 26px;
-  color: var(--color-rose);
-  margin-bottom: var(--space-sm);
-}
+.option .btn { margin-top: var(--space-sm); }
+
 .detail-label {
   font-size: 0.68rem;
   letter-spacing: 0.24em;
@@ -605,6 +642,42 @@ blockquote.vow {
   font-family: var(--font-display);
   font-size: 1.2rem;
   color: var(--color-ink);
+}
+.in-memoriam {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 0.3em;
+  margin-top: -0.3em;
+}
+.in-memoriam svg { width: 26px; height: 26px; }
+
+/* ---------- padrinos: ficha botánica en cruz, sin cajas ---------- */
+.padrinos-grid {
+  margin-top: var(--space-xl);
+  max-width: 480px;
+  margin-inline: auto;
+  display: grid;
+  gap: var(--space-lg);
+}
+.padrino { padding-top: var(--space-lg); }
+.padrino:first-child { padding-top: 0; }
+.padrino:not(:first-child) { border-top: 1px solid rgba(59, 42, 44, 0.12); }
+.padrino-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px; height: 42px;
+  color: var(--color-rose);
+  margin-bottom: var(--space-xs);
+}
+.padrino-icon svg { width: 22px; height: 22px; }
+
+@media (min-width: 640px) {
+  .padrinos-grid { grid-template-columns: repeat(2, 1fr); row-gap: var(--space-lg); column-gap: var(--space-xl); }
+  .padrino { padding-top: 0; border-top: none !important; }
+  .padrino:nth-child(1), .padrino:nth-child(2) { padding-bottom: var(--space-lg); border-bottom: 1px solid rgba(59, 42, 44, 0.12); }
+  .padrino:nth-child(odd) { border-right: 1px solid rgba(59, 42, 44, 0.12); padding-right: var(--space-lg); }
+  .padrino:nth-child(even) { padding-left: var(--space-lg); }
 }
 
 .btn {
@@ -618,6 +691,7 @@ blockquote.vow {
   text-transform: uppercase;
   transition: transform 0.35s var(--ease-editorial), background-color 0.35s ease, color 0.35s ease;
 }
+.btn svg { width: 15px; height: 15px; flex: none; }
 .btn-outline {
   border: 1px solid var(--color-ink);
   color: var(--color-ink);
@@ -631,8 +705,12 @@ blockquote.vow {
 }
 .btn-solid:hover { transform: translateY(-2px); background: var(--color-rose); border-color: var(--color-rose); }
 .btn-solid:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-
-.detail-card .btn { margin-top: var(--space-sm); }
+.btn-soft {
+  border: 1px solid transparent;
+  background: var(--color-blush);
+  color: var(--color-ink);
+}
+.btn-soft:hover { background: var(--color-blush-deep); color: var(--color-white); }
 
 .section-intro {
   max-width: 46ch;
@@ -644,17 +722,25 @@ blockquote.vow {
 /* =========================================================
    CÓDIGO DE VESTIMENTA
    ========================================================= */
-.vestimenta { padding-block: var(--space-xl) var(--space-2xl); text-align: center; }
+.vestimenta { padding-block: var(--space-xl) var(--space-2xl); text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
 .vestimenta-card {
-  margin: var(--space-xl) auto 0;
-  max-width: 480px;
-  background: var(--color-white);
-  border: 1px solid rgba(59, 42, 44, 0.08);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg) var(--space-md);
-  box-shadow: var(--shadow-card);
+  margin: var(--space-md) auto 0;
+  max-width: 440px;
+  padding-block: var(--space-lg);
+  border-top: 1px solid rgba(59, 42, 44, 0.12);
+  border-bottom: 1px solid rgba(59, 42, 44, 0.12);
 }
-.vestimenta-card svg { width: 26px; height: 26px; color: var(--color-rose); margin-bottom: var(--space-sm); }
+.vestimenta-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; height: 50px;
+  border: 1px solid var(--color-blush-deep);
+  border-radius: 50%;
+  color: var(--color-rose);
+  margin-bottom: var(--space-sm);
+}
+.vestimenta-icon svg { width: 20px; height: 20px; }
 .vestimenta-text { color: var(--color-ink-soft); margin-top: 0.6em; }
 .palette-row { display: flex; gap: 0.6rem; justify-content: center; margin-top: var(--space-md); }
 .palette-swatch {
@@ -700,7 +786,7 @@ blockquote.vow {
 /* =========================================================
    MESA DE REGALOS
    ========================================================= */
-.regalos { padding-block: var(--space-xl) var(--space-2xl); text-align: center; }
+.regalos { padding-block: var(--space-xl) var(--space-2xl); text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
 
 /* =========================================================
    GALERÍA
@@ -888,8 +974,8 @@ blockquote.vow {
 /* =========================================================
    CONTACTOS
    ========================================================= */
-.contactos { padding-block: var(--space-xl) var(--space-2xl); text-align: center; }
-.contactos .detail-card .btn { margin-top: var(--space-md); }
+.contactos { padding-block: var(--space-xl) var(--space-2xl); text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
+.contactos .option .btn { margin-top: var(--space-md); }
 
 /* =========================================================
    RSVP — llamado final en la landing + página aparte (rsvp.html)
@@ -897,7 +983,7 @@ blockquote.vow {
 .rsvp-cta {
   position: relative;
   padding-block: var(--space-2xl);
-  background: var(--color-cream-soft);
+  background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%);
   text-align: center;
   overflow: hidden;
 }
@@ -1095,18 +1181,35 @@ body.rsvp-page {
   transition: transform 0.3s ease;
 }
 .music-toggle:hover { transform: scale(1.08); }
-.music-toggle svg { width: 19px; height: 19px; }
+.music-toggle svg { width: 18px; height: 18px; }
 .music-toggle .icon-muted { display: none; }
 .music-toggle.is-muted .icon-playing { display: none; }
-.music-toggle.is-muted .icon-muted { display: block; }
+.music-toggle.is-muted .icon-muted { display: block; margin-left: 2px; }
 
-.music-toggle:not(.is-muted) .icon-playing { animation: music-pulse 1.6s ease-in-out infinite; }
-@keyframes music-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.14); }
+.music-toggle .eq {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 16px;
+}
+.music-toggle .eq-bar {
+  width: 3px;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.music-toggle:not(.is-muted) .eq-bar { animation: eq-bounce 0.9s ease-in-out infinite; }
+.music-toggle:not(.is-muted) .eq-bar:nth-child(1) { animation-delay: -0.7s; }
+.music-toggle:not(.is-muted) .eq-bar:nth-child(2) { animation-delay: -0.4s; }
+.music-toggle:not(.is-muted) .eq-bar:nth-child(3) { animation-delay: -0.55s; }
+.music-toggle:not(.is-muted) .eq-bar:nth-child(4) { animation-delay: -0.2s; }
+@keyframes eq-bounce {
+  0%, 100% { height: 5px; }
+  50% { height: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .music-toggle:not(.is-muted) .icon-playing { animation: none; }
+  .music-toggle:not(.is-muted) .eq-bar { animation: none; height: 11px; }
 }
 
 @media (min-width: 768px) {

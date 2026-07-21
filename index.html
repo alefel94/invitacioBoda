@@ -137,8 +137,13 @@
   <source src="assets/audio/song.mp3" type="audio/mpeg">
 </audio>
 <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" hidden>
-  <svg class="icon-playing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-  <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><path d="M15 10l6 6M21 10l-6 6" stroke-linecap="round"/></svg>
+  <span class="icon-playing eq" aria-hidden="true">
+    <span class="eq-bar"></span>
+    <span class="eq-bar"></span>
+    <span class="eq-bar"></span>
+    <span class="eq-bar"></span>
+  </span>
+  <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.2v11.6c0 .9 1 1.5 1.8 1L18.5 13.8a1.2 1.2 0 0 0 0-1.9L9.8 5.2c-.8-.5-1.8.1-1.8 1Z" fill="currentColor"/></svg>
 </button>
 
 <!-- ============ HERO ============ -->
@@ -271,16 +276,22 @@
     <div class="venues">
       <div class="venue reveal">
         <span class="venue-marker" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v5"/><path d="M9.5 4.5h5"/><path d="M6 21V11l6-4 6 4v10"/><path d="M4 21h16"/><path d="M12 21v-6"/></svg>
         </span>
         <p class="detail-label">Ceremonia</p>
         <p class="venue-name">Iglesia San Francisco</p>
         <p class="venue-address">Antigua, Guatemala</p>
         <p class="detail-time">7:30 PM</p>
-        <a class="venue-link" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+San+Francisco+Antigua+Guatemala" target="_blank" rel="noopener">
-          Ver mapa
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <div class="venue-links">
+          <a class="btn btn-soft btn-map" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+San+Francisco+Antigua+Guatemala" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+            Maps
+          </a>
+          <a class="btn btn-soft btn-waze" href="https://www.waze.com/ul?q=Iglesia%20San%20Francisco%20Antigua%20Guatemala&amp;navigate=yes" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a7 7 0 0 0-7 7c0 3.5 2.7 5 2.7 7.5" stroke-linecap="round"/><path d="M9 20.5c1 .6 2.2.5 3-.5" stroke-linecap="round"/><circle cx="9.5" cy="10" r="1"/><circle cx="14.5" cy="10" r="1"/><path d="M17.5 8.5a7 7 0 0 1 .3 7.7" stroke-linecap="round"/></svg>
+            Waze
+          </a>
+        </div>
       </div>
 
       <div class="venue-connector" aria-hidden="true">
@@ -291,16 +302,22 @@
 
       <div class="venue reveal">
         <span class="venue-marker" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l-1.2 6.5A4.8 4.8 0 0 1 12 14a4.8 4.8 0 0 1-4.8-4.5L6 3Z"/><path d="M12 14v5"/><path d="M8.5 21h7"/></svg>
         </span>
         <p class="detail-label">Recepción</p>
-        <p class="venue-name">Villa de las Flores</p>
-        <p class="venue-address">Antigua, Guatemala</p>
-        <p class="detail-time">8:30 PM</p>
-        <a class="venue-link" href="https://www.google.com/maps/search/?api=1&amp;query=Villa+de+las+Flores+Antigua+Guatemala" target="_blank" rel="noopener">
-          Ver mapa
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <p class="venue-name">Quinta Majam</p>
+        <p class="venue-address">Lindavista, Villas de Monticello, Zapopan, Jal.</p>
+        <p class="detail-time">7:00 PM</p>
+        <div class="venue-links">
+          <a class="btn btn-soft btn-map" href="https://www.google.com/maps/place/Quinta+Majam/@20.8937992,-103.4392049,16z/data=!4m9!3m8!1s0x8428a2329a793eb9:0xfbd1a00f8845a08b!5m2!4m1!1i2!8m2!3d20.8938464!4d-103.43919!16s%2Fg%2F113k5hdpv?entry=ttu&amp;g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+            Maps
+          </a>
+          <a class="btn btn-soft btn-waze" href="https://www.waze.com/ul?ll=20.8938464,-103.43919&amp;navigate=yes&amp;q=Quinta%20Majam" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a7 7 0 0 0-7 7c0 3.5 2.7 5 2.7 7.5" stroke-linecap="round"/><path d="M9 20.5c1 .6 2.2.5 3-.5" stroke-linecap="round"/><circle cx="9.5" cy="10" r="1"/><circle cx="14.5" cy="10" r="1"/><path d="M17.5 8.5a7 7 0 0 1 .3 7.7" stroke-linecap="round"/></svg>
+            Waze
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -316,11 +333,21 @@
     <div class="padres-grid">
       <div class="padres-col reveal">
         <p class="detail-label">Padres de la novia</p>
-        <p class="detail-value">Nombre Apellido<br>Nombre Apellido</p>
+        <p class="detail-value">Ana Laura Escobedo Mejía<br>Rafael Castanedo Partida</p>
       </div>
       <div class="padres-col reveal">
         <p class="detail-label">Padres del novio</p>
-        <p class="detail-value">Nombre Apellido<br>Nombre Apellido</p>
+        <p class="detail-value">Alma Rocío Vázquez Domínguez
+          <span class="in-memoriam" title="En memoria" aria-label="En memoria">
+            <svg viewBox="0 0 64 64">
+              <path d="M2,36 Q10,30 14,28 Q18,10 30,8 Q24,20 26,26 Q30,18 36,16 Q40,10 46,10 Q52,12 56,18 L63,20 L55,22 Q50,30 44,36 Q30,44 16,44 Q8,44 2,40 Q8,38 2,36 Z" fill="#FFFDF9" stroke="#C9AD8C" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M52,15 L57.5,17.5" fill="none" stroke="#C9AD8C" stroke-width="1"/>
+              <circle cx="43" cy="15.5" r="1.15" fill="#3B2A2C"/>
+              <path d="M60,17 Q68,13.5 67,18.5 Q61,21.5 60,17 Z" fill="#7C8659"/>
+              <path d="M61.5,16.5 Q64.5,16 65.5,17.6" fill="none" stroke="#4E5A3C" stroke-width="0.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <br>Felipe Mejía Mendoza</p>
       </div>
     </div>
   </div>
@@ -334,19 +361,31 @@
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
 
     <div class="padrinos-grid">
-      <div class="detail-card reveal">
+      <div class="padrino reveal">
+        <span class="padrino-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 4c1.2 1.6 1.6 2.6 1.6 3.4a1.6 1.6 0 1 1-3.2 0c0-.8.4-1.8 1.6-3.4Z"/><rect x="9.4" y="9" width="5.2" height="11" rx="1"/><path d="M7 20h10" stroke-linecap="round"/></svg>
+        </span>
         <p class="detail-label">Padrinos de Velación</p>
-        <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
+        <p class="detail-value">Maria Fernanda Loza Lopez<br>&amp; Jesus Antonio Urzua Del Castillo</p>
       </div>
-      <div class="detail-card reveal">
+      <div class="padrino reveal">
+        <span class="padrino-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="14" r="5"/></svg>
+        </span>
         <p class="detail-label">Padrinos de Anillos</p>
         <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
       </div>
-      <div class="detail-card reveal">
+      <div class="padrino reveal">
+        <span class="padrino-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="12" cy="17" rx="7" ry="2.2"/><path d="M5 17V9.5M19 17V9.5"/><ellipse cx="12" cy="9.5" rx="7" ry="2.2"/></svg>
+        </span>
         <p class="detail-label">Padrinos de Arras</p>
         <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
       </div>
-      <div class="detail-card reveal">
+      <div class="padrino reveal">
+        <span class="padrino-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18.6 8.4a3.6 3.6 0 1 0 0 7.2c-1.6 0-2.9-.7-4-1.8L12 11.2c-1.1-1.1-2.4-1.8-4-1.8a3.6 3.6 0 1 0 0 7.2c1.6 0 2.9-.7 4-1.8l2.6-2.6c1.1-1.1 2.4-1.8 4-1.8Z"/></svg>
+        </span>
         <p class="detail-label">Padrinos de Lazo</p>
         <p class="detail-value">Nombre Apellido<br>&amp; Nombre Apellido</p>
       </div>
@@ -362,7 +401,9 @@
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
 
     <div class="vestimenta-card reveal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 8l6 4-6 4V8Z" stroke-linejoin="round"/><path d="M20 8l-6 4 6 4V8Z" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.6"/></svg>
+      <span class="vestimenta-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 8l6 4-6 4V8Z" stroke-linejoin="round"/><path d="M20 8l-6 4 6 4V8Z" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.6"/></svg>
+      </span>
       <p class="detail-label">Formal / Etiqueta</p>
       <p class="vestimenta-text">Nos encantaría verte elegante en nuestra celebración. Evita por favor el blanco, marfil y tonos pastel muy claros (reservados para la novia).</p>
       <div class="palette-row" aria-hidden="true">
@@ -407,22 +448,47 @@
     <p class="eyebrow eyebrow--center">Con Amor</p>
     <h2 class="section-heading">Mesa de Regalos</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
-    <p class="section-intro">Tu presencia es el regalo más importante para nosotros. Si deseas obsequiarnos algo más, aquí tienes un par de opciones.</p>
+    <p class="section-intro">Tu presencia es el regalo más importante para nosotros. Si deseas obsequiarnos algo más, aquí tienes algunas opciones.</p>
 
-    <div class="detail-grid">
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
-        <p class="detail-label">Lluvia de Sobres</p>
-        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Si prefieres contribuir en efectivo, habrá una urna disponible el día del evento.</p>
+    <div class="options">
+      <div class="option reveal">
+        <span class="option-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l1 12a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20L6 8Z" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </span>
+        <p class="detail-label">Mesa de Regalos Liverpool</p>
+        <p class="option-text">Elige tu regalo directamente en nuestra mesa de Liverpool.</p>
+        <a class="btn btn-soft" href="https://mesaderegalos.liverpool.com.mx/gestiondeeventos/listaderegalos/51939046" target="_blank" rel="noopener">Ver mesa de regalos</a>
       </div>
 
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
+      <div class="option-connector" aria-hidden="true">
+        <span class="option-connector-line"></span>
+        <span class="option-connector-dot">✦</span>
+        <span class="option-connector-line"></span>
+      </div>
+
+      <div class="option reveal">
+        <span class="option-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13"/><path d="M12 8c-1.5-4-6-4-6 0M12 8c1.5-4 6-4 6 0"/></svg>
+        </span>
+        <p class="detail-label">Lluvia de Sobres</p>
+        <p class="option-text">Si prefieres contribuir en efectivo, habrá una urna disponible el día del evento.</p>
+      </div>
+
+      <div class="option-connector" aria-hidden="true">
+        <span class="option-connector-line"></span>
+        <span class="option-connector-dot">✦</span>
+        <span class="option-connector-line"></span>
+      </div>
+
+      <div class="option reveal">
+        <span class="option-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10l9-5 9 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10v8M9 10v8M15 10v8M19.5 10v8" stroke-linecap="round"/><path d="M3 20h18" stroke-linecap="round"/></svg>
+        </span>
         <p class="detail-label">Transferencia Bancaria</p>
-        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body); line-height:1.9;">
-          Titular: Viridiana Pérez (ejemplo)<br>
-          Banco: Banco Ejemplo<br>
-          Cuenta monetaria: 0000-0000-0000
+        <p class="option-text">
+          Titular: Felipe Alejandro Mejía Vázquez<br>
+          Banco: Santander<br>
+          CLABE: 014320568220135662
         </p>
       </div>
     </div>
@@ -512,18 +578,28 @@
     <h2 class="section-heading">Contactos</h2>
     <div class="divider-motif" aria-hidden="true"><span>✦</span></div>
 
-    <div class="detail-grid">
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="options">
+      <div class="option reveal">
+        <span class="option-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
         <p class="detail-label">Organización</p>
-        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Nombre Apellido</p>
+        <p class="option-title">Nombre Apellido</p>
         <a class="btn btn-outline" href="https://wa.me/50200000000" target="_blank" rel="noopener">WhatsApp</a>
       </div>
 
-      <div class="detail-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="option-connector" aria-hidden="true">
+        <span class="option-connector-line"></span>
+        <span class="option-connector-dot">✦</span>
+        <span class="option-connector-line"></span>
+      </div>
+
+      <div class="option reveal">
+        <span class="option-marker" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
         <p class="detail-label">Padres de familia</p>
-        <p class="detail-value" style="font-size:1rem; font-family: var(--font-body);">Nombre Apellido</p>
+        <p class="option-title">Nombre Apellido</p>
         <a class="btn btn-outline" href="https://wa.me/50200000000" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
