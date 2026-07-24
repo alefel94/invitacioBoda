@@ -21,6 +21,8 @@
   const submitBtn = document.getElementById("rsvpSubmit");
   const note = document.getElementById("rsvpNote");
   const successEl = document.getElementById("rsvpSuccess");
+  const successTitle = document.getElementById("rsvpSuccessTitle");
+  const successText = document.getElementById("rsvpSuccessText");
   const inviteCode = sessionStorage.getItem("inviteCode") || "";
 
   // el botón solo se habilita cuando Nombre y ¿Asistirás? tienen datos
@@ -115,9 +117,22 @@
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("request-failed");
+      const data = await res.json().catch(() => ({}));
+
+      if (data.duplicate) {
+        const existing = data.existing || {};
+        successTitle.textContent = "Ya habíamos recibido tu confirmación";
+        successText.textContent = existing.attending
+          ? `Nos dijiste que sí asistirías (${existing.guestCount || 1} ${existing.guestCount === 1 ? "persona" : "personas"}). Si algo cambió, contáctanos directamente.`
+          : "Nos dijiste que no podrás acompañarnos. Si cambiaste de opinión, contáctanos directamente.";
+      }
 
       form.hidden = true;
       successEl.classList.add("is-visible");
+      const card = successEl.closest(".rsvp-card");
+      card?.classList.add("is-success");
+      card?.querySelector(".rsvp-deadline")?.setAttribute("hidden", "");
+      card?.scrollTo({ top: 0, behavior: "instant" });
       sessionStorage.setItem("envelopeOpened", "1");
 
       if (document.body.classList.contains("rsvp-page")) {

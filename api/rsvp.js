@@ -50,6 +50,31 @@ async function handleCreate(req, res) {
           created_at = NOW()
       `;
     } else {
+      // sin código de invitación: no hay una sola fila "dueña" del nombre,
+      // así que hay que revisar a mano si ese nombre ya confirmó antes
+      // para no dejar que se registre dos veces.
+      const { rows: existingRows } = await sql`
+        SELECT attending, guest_count, message, created_at
+        FROM rsvp_responses
+        WHERE guest_id IS NULL AND lower(full_name) = lower(${safeName})
+        ORDER BY created_at DESC
+        LIMIT 1
+      `;
+
+      if (existingRows.length) {
+        const existing = existingRows[0];
+        return res.status(200).json({
+          ok: true,
+          duplicate: true,
+          existing: {
+            attending: existing.attending,
+            guestCount: existing.guest_count,
+            message: existing.message,
+            createdAt: existing.created_at,
+          },
+        });
+      }
+
       await sql`
         INSERT INTO rsvp_responses (full_name, attending, guest_count, message)
         VALUES (${safeName}, ${isAttending}, ${safeGuestCount}, ${safeMessage})

@@ -64,14 +64,17 @@ function unlockScroll() {
     { once: true }
   );
 
-  // 2) Clic en "Continuar": se retira el sobre y se revela la landing page.
-  //    El RSVP ya no se abre aquí — vive al final de la página, como antes.
+  // 2) Clic en "Continuar": el sobre se desvanece con un fundido elegante
+  //    (ya definido en CSS como .is-closing, solo faltaba dispararlo) y
+  //    recién entonces se revela la landing page. El RSVP ya no se abre
+  //    aquí — vive al final de la página, como antes.
   continueBtn?.addEventListener(
     "click",
     () => {
       sessionStorage.setItem("envelopeOpened", "1");
-      gate.style.display = "none";
       document.documentElement.classList.remove("no-scroll");
+      gate.classList.add("is-closing");
+      setTimeout(() => { gate.style.display = "none"; }, reduced ? 50 : 2000);
     },
     { once: true }
   );
@@ -127,96 +130,6 @@ function unlockScroll() {
 // (La música de fondo vive en js/music.js — se comparte con rsvp.html
 // para que no se corte al navegar entre páginas)
 
-// ---------- Galería: lightbox con transición FLIP (crece desde la miniatura) ----------
-(function galleryLightbox() {
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
-  const closeBtn = document.getElementById("lightboxClose");
-  const thumbs = document.querySelectorAll(".gallery-item img");
-  if (!lightbox || !lightboxImg || !thumbs.length) return;
-
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const FLIGHT_MS = 400;
-  let originThumb = null;
-  let closeTimer = null;
-
-  // dónde y de qué tamaño se verá la foto ya centrada, respetando su
-  // proporción real (misma lógica que el max-width/max-height del CSS)
-  function centeredRect(naturalW, naturalH) {
-    const maxW = Math.min(900, window.innerWidth * 0.92);
-    const maxH = window.innerHeight * 0.85;
-    const ratio = Math.min(maxW / naturalW, maxH / naturalH, 1);
-    const width = naturalW * ratio;
-    const height = naturalH * ratio;
-    return {
-      width,
-      height,
-      left: (window.innerWidth - width) / 2,
-      top: (window.innerHeight - height) / 2,
-    };
-  }
-
-  function placeAt(rect) {
-    lightboxImg.style.top = `${rect.top}px`;
-    lightboxImg.style.left = `${rect.left}px`;
-    lightboxImg.style.width = `${rect.width}px`;
-    lightboxImg.style.height = `${rect.height}px`;
-  }
-
-  function openLightbox(img) {
-    if (img.closest(".photo-slot")?.classList.contains("is-missing")) return;
-    clearTimeout(closeTimer);
-    originThumb = img;
-    lightboxImg.src = img.currentSrc || img.src;
-    lightboxImg.alt = img.alt || "";
-    lockScroll();
-    lightbox.classList.add("is-visible");
-
-    if (reduced) return;
-
-    const from = img.getBoundingClientRect();
-    lightboxImg.classList.add("is-flying");
-    lightboxImg.style.transition = "none";
-    placeAt(from);
-    void lightboxImg.offsetWidth; // reflow: registra el punto de partida antes de animar
-    lightboxImg.style.transition = "";
-
-    const to = centeredRect(img.naturalWidth || from.width, img.naturalHeight || from.height);
-    requestAnimationFrame(() => placeAt(to));
-  }
-
-  function closeLightbox() {
-    if (!lightbox.classList.contains("is-visible")) return;
-    unlockScroll();
-    // quitar is-visible ya arranca el fundido del fondo; el vuelo de
-    // regreso corre en paralelo, así que ambos terminan juntos
-    lightbox.classList.remove("is-visible");
-
-    if (reduced || !originThumb) {
-      finishClose();
-      return;
-    }
-
-    placeAt(originThumb.getBoundingClientRect());
-    closeTimer = setTimeout(finishClose, FLIGHT_MS);
-  }
-
-  function finishClose() {
-    lightboxImg.classList.remove("is-flying");
-    lightboxImg.removeAttribute("style");
-    originThumb = null;
-  }
-
-  thumbs.forEach((img) => img.addEventListener("click", () => openLightbox(img)));
-  closeBtn.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (event) => {
-    if (event.target === lightbox) closeLightbox();
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && lightbox.classList.contains("is-visible")) closeLightbox();
-  });
-})();
-
 // ---------- Galería: carrusel con autoplay, flechas, dots y swipe ----------
 (function galleryCarousel() {
   const track = document.getElementById("galleryTrack");
@@ -224,7 +137,6 @@ function unlockScroll() {
   const dots = Array.from(document.querySelectorAll(".gallery-dot"));
   const prevBtn = document.getElementById("galleryPrev");
   const nextBtn = document.getElementById("galleryNext");
-  const lightbox = document.getElementById("lightbox");
   if (!track || !slides.length) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -262,7 +174,6 @@ function unlockScroll() {
     if (reduced || autoplayTimer) return;
     autoplayTimer = setInterval(() => {
       if (!sectionVisible || document.hidden) return;
-      if (lightbox?.classList.contains("is-visible")) return;
       next();
     }, AUTOPLAY_MS);
   }
@@ -360,7 +271,7 @@ function unlockScroll() {
 
   btn.addEventListener("click", () => {
     const start = new Date(heroEl.dataset.weddingDate);
-    const end = new Date(start.getTime() + 6 * 60 * 60 * 1000);
+    const end = new Date(start.getTime() + 8.5 * 60 * 60 * 1000);
 
     const ics = [
       "BEGIN:VCALENDAR",
@@ -426,7 +337,6 @@ function unlockScroll() {
     "vestimenta",
     "regalos",
     "galeria",
-    "contactos",
   ]
     .map((id) => document.getElementById(id))
     .filter(Boolean);

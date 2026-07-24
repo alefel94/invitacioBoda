@@ -24,6 +24,20 @@ const statTicketsUsed = document.getElementById("statTicketsUsed");
 const statTicketsTotal = document.getElementById("statTicketsTotal");
 const statPending = document.getElementById("statPending");
 
+const addGuestBtn = document.getElementById("addGuestBtn");
+const guestModal = document.getElementById("guestModal");
+const guestModalClose = document.getElementById("guestModalClose");
+const guestModalTitle = document.getElementById("guestModalTitle");
+const guestForm = document.getElementById("guestForm");
+const guestFormNote = document.getElementById("guestFormNote");
+const guestFormSubmit = document.getElementById("guestFormSubmit");
+
+// caché en memoria de /api/guests: la pestaña "Invitados" solo se pide al
+// entrar (nunca se ve de inicio), así que sin esto su primer clic siempre
+// pagaba el cold-start del serverless function completo (~3s). Precargando
+// en paralelo con las confirmaciones, el cambio de pestaña se siente instantáneo.
+let guestsData = null;
+
 function showLogin() {
   loginScreen.hidden = false;
   dashboard.hidden = true;
@@ -105,7 +119,11 @@ function showTab(tab) {
   tabGuestsBtn.classList.toggle("is-active", isGuests);
   panelResponses.hidden = isGuests;
   panelGuests.hidden = !isGuests;
-  if (isGuests) loadGuests();
+  if (isGuests) {
+    // si ya la precargamos en segundo plano, se pinta al instante
+    if (guestsData) renderGuests(guestsData);
+    else loadGuests();
+  }
 }
 tabResponsesBtn.addEventListener("click", () => showTab("responses"));
 tabGuestsBtn.addEventListener("click", () => showTab("guests"));
@@ -138,7 +156,13 @@ function renderGuests(guests) {
         <td><span class="status-pill ${statusClass[g.status] || "pending"}">${statusLabel[g.status] || g.status}</span></td>
         <td>${g.status === "confirmado" ? g.guest_count : "—"} / ${g.allowed_guests}</td>
         <td>${g.message ? escapeHtml(g.message) : "—"}</td>
-        <td><button class="copy-link-btn" data-link="${link}" type="button">Copiar link</button></td>
+        <td>
+          <div class="row-actions">
+            <button class="copy-link-btn" data-link="${link}" type="button">Copiar link</button>
+            <button class="copy-link-btn" data-edit-id="${g.id}" type="button">Editar</button>
+            <button class="copy-link-btn is-danger" data-delete-id="${g.id}" data-delete-name="${escapeHtml(g.display_name)}" type="button">Eliminar</button>
+          </div>
+        </td>
       </tr>`;
     })
     .join("");
@@ -152,14 +176,14 @@ function renderGuests(guests) {
             <th>Estado</th>
             <th>Boletos</th>
             <th>Mensaje</th>
-            <th>Link</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
 
-  guestsTableContainer.querySelectorAll(".copy-link-btn").forEach((btn) => {
+  guestsTableContainer.querySelectorAll(".copy-link-btn[data-link]").forEach((btn) => {
     btn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(btn.dataset.link);
@@ -170,6 +194,17 @@ function renderGuests(guests) {
         /* portapapeles no disponible; sin problema, el botón solo no hace nada */
       }
     });
+  });
+
+  guestsTableContainer.querySelectorAll("[data-edit-id]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const guest = guestsData.find((g) => String(g.id) === btn.dataset.editId);
+      if (guest) openGuestModal(guest);
+    });
+  });
+
+  guestsTableContainer.querySelectorAll("[data-delete-id]").forEach((btn) => {
+    btn.addEventListener("click", () => deleteGuest(btn.dataset.deleteId, btn.dataset.deleteName));
   });
 }
 
@@ -183,9 +218,120 @@ async function loadGuests() {
     }
     if (!res.ok) throw new Error("request-failed");
     const data = await res.json();
-    renderGuests(data.guests || []);
+    guestsData = data.guests || [];
+    renderGuests(guestsData);
   } catch (err) {
     guestsTableContainer.innerHTML = `<p class="admin-error">No se pudo cargar la lista de invitados. Intenta de nuevo.</p>`;
+  }
+}
+
+// ---------- CRUD de invitados (modal para agregar/editar + eliminar) ----------
+function openGuestModal(guest) {
+  guestForm.reset();
+  guestFormNote.textContent = "";
+  guestFormNote.className = "form-note";
+
+  if (guest) {
+    guestModalTitle.textContent = "Editar invitado";
+    document.getElementById("guestId").value = guest.id;
+    document.getElementById("guestDisplayName").value = guest.display_name;
+    document.getElementById("guestGroup").value = guest.guest_group || "";
+    document.getElementById("guestAllowed").value = guest.allowed_guests;
+    document.getElementById("guestPhone").value = guest.phone || "";
+  } else {
+    guestModalTitle.textContent = "Agregar invitado";
+    document.getElementById("guestId").value = "";
+    document.getElementById("guestAllowed").value = "1";
+  }
+
+  guestModal.hidden = false;
+  requestAnimationFrame(() => guestModal.classList.add("is-visible"));
+  document.getElementById("guestDisplayName").focus();
+}
+
+function closeGuestModal() {
+  guestModal.classList.remove("is-visible");
+  setTimeout(() => { guestModal.hidden = true; }, 250);
+}
+
+addGuestBtn.addEventListener("click", () => openGuestModal(null));
+guestModalClose.addEventListener("click", closeGuestModal);
+guestModal.addEventListener("click", (event) => {
+  if (event.target === guestModal) closeGuestModal();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && guestModal.classList.contains("is-visible")) closeGuestModal();
+});
+
+guestForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  guestFormNote.textContent = "";
+  guestFormNote.className = "form-note";
+
+  const id = document.getElementById("guestId").value;
+  const payload = {
+    displayName: document.getElementById("guestDisplayName").value.trim(),
+    guestGroup: document.getElementById("guestGroup").value.trim(),
+    allowedGuests: Number(document.getElementById("guestAllowed").value) || 1,
+    phone: document.getElementById("guestPhone").value.trim(),
+  };
+  if (id) payload.id = Number(id);
+
+  guestFormSubmit.disabled = true;
+  guestFormSubmit.textContent = "Guardando…";
+
+  try {
+    const res = await fetch("/api/guests", {
+      method: id ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401) {
+      showLogin();
+      return;
+    }
+    if (!res.ok) throw new Error("request-failed");
+
+    closeGuestModal();
+    await loadGuests();
+  } catch (err) {
+    guestFormNote.textContent = "No se pudo guardar. Intenta de nuevo.";
+    guestFormNote.classList.add("error");
+  } finally {
+    guestFormSubmit.disabled = false;
+    guestFormSubmit.textContent = "Guardar";
+  }
+});
+
+async function deleteGuest(id, name) {
+  if (!window.confirm(`¿Eliminar la invitación de "${name}"? Esto no se puede deshacer.`)) return;
+  try {
+    const res = await fetch(`/api/guests?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      credentials: "same-origin",
+    });
+    if (res.status === 401) {
+      showLogin();
+      return;
+    }
+    if (!res.ok) throw new Error("request-failed");
+    await loadGuests();
+  } catch (err) {
+    window.alert("No se pudo eliminar. Intenta de nuevo.");
+  }
+}
+
+// pide /api/guests sin tocar el DOM (la pestaña ni se ve todavía): solo
+// deja los datos listos en caché para cuando el usuario sí la abra.
+async function prefetchGuests() {
+  try {
+    const res = await fetch("/api/guests", { credentials: "same-origin" });
+    if (!res.ok) return;
+    const data = await res.json();
+    guestsData = data.guests || [];
+  } catch (err) {
+    /* si falla, loadGuests() lo intenta de nuevo al abrir la pestaña */
   }
 }
 
@@ -201,6 +347,7 @@ async function loadRsvps() {
     const data = await res.json();
     showDashboard();
     renderRsvps(data.rsvps || []);
+    prefetchGuests();
   } catch (err) {
     tableContainer.innerHTML = `<p class="admin-error">No se pudieron cargar las confirmaciones. Intenta de nuevo.</p>`;
   }

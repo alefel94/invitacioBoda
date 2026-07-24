@@ -16,6 +16,7 @@
 
   --font-display: "Fraunces", "Times New Roman", serif;
   --font-body: "Jost", "Segoe UI", sans-serif;
+  --font-script: "Fraunces", cursive;
 
   --space-xs: 0.5rem;
   --space-sm: 1rem;
@@ -125,8 +126,7 @@ body::before {
 .itinerario .eyebrow, .itinerario .divider-motif,
 .padres .eyebrow, .padres .divider-motif,
 .vestimenta .eyebrow, .vestimenta .divider-motif,
-.regalos .eyebrow, .regalos .divider-motif,
-.contactos .eyebrow, .contactos .divider-motif {
+.regalos .eyebrow, .regalos .divider-motif {
   color: var(--color-blush-deep);
 }
 
@@ -530,9 +530,10 @@ blockquote.vow {
 .timeline-item:nth-child(4).reveal { transition-delay: 0.36s; }
 .timeline-item:nth-child(5).reveal { transition-delay: 0.48s; }
 .timeline-item:nth-child(6).reveal { transition-delay: 0.6s; }
+.timeline-item:nth-child(7).reveal { transition-delay: 0.72s; }
 
 /* =========================================================
-   UBICACIONES / PADRES / PADRINOS / REGALOS / CONTACTOS
+   UBICACIONES / PADRES / PADRINOS / REGALOS
    Sin cajas ni sombras: insignias circulares, tipografía y líneas
    finas — el mismo lenguaje editorial en toda la página.
    ========================================================= */
@@ -566,7 +567,7 @@ blockquote.vow {
   margin-top: 0.4em;
 }
 
-/* ---------- insignia circular + conector, compartidos por ubicaciones/regalos/contactos ---------- */
+/* ---------- insignia circular + conector, compartidos por ubicaciones/regalos ---------- */
 .venues,
 .options {
   margin: var(--space-xl) auto 0;
@@ -647,9 +648,10 @@ blockquote.vow {
   display: inline-flex;
   vertical-align: middle;
   margin-left: 0.3em;
-  margin-top: -0.3em;
+  margin-top: -0.2em;
+  color: var(--color-rose);
 }
-.in-memoriam svg { width: 26px; height: 26px; }
+.in-memoriam svg { width: 16px; height: 16px; }
 
 /* ---------- padrinos: ficha botánica en cruz, sin cajas ---------- */
 .padrinos-grid {
@@ -827,7 +829,6 @@ blockquote.vow {
 .gallery-slide .photo-placeholder-text { font-size: 0.62rem; }
 .gallery-slide .photo-placeholder-text code { padding: 0.15em 0.5em; }
 .gallery-slide:not(.is-missing) img {
-  cursor: zoom-in;
   width: 100%; height: 100%;
   user-select: none;
   -webkit-user-drag: none;
@@ -901,87 +902,12 @@ blockquote.vow {
   .gallery-slide { transition: none; }
 }
 
-/* =========================================================
-   LIGHTBOX (foto de galería en grande)
-   ========================================================= */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-lg) var(--space-md);
-  background: rgba(20, 16, 10, 0.88);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-.lightbox.is-visible { opacity: 1; pointer-events: auto; }
-
-.lightbox-img {
-  max-width: min(900px, 92vw);
-  max-height: 85vh;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
-  transform: scale(0.86);
-  opacity: 0;
-  transition: transform 0.45s var(--ease-editorial), opacity 0.4s ease;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-touch-callout: none;
-}
-.lightbox.is-visible .lightbox-img { transform: scale(1); opacity: 1; }
-
-/* transición FLIP: mientras "vuela", su posición/tamaño se controla por
-   JS (top/left/width/height) en vez del scale/opacity de arriba */
-#lightboxImg.is-flying {
-  position: fixed;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  transform: none;
-  opacity: 1;
-  object-fit: cover;
-  transition: top 0.4s var(--ease-editorial), left 0.4s var(--ease-editorial),
-    width 0.4s var(--ease-editorial), height 0.4s var(--ease-editorial);
-}
-
-.lightbox-close {
-  position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  backdrop-filter: blur(4px);
-  transition: background-color 0.25s ease, transform 0.25s ease;
-}
-.lightbox-close:hover { background: rgba(255, 255, 255, 0.28); transform: scale(1.06); }
-.lightbox-close svg { width: 18px; height: 18px; }
-
-@media (prefers-reduced-motion: reduce) {
-  .lightbox, .lightbox-img { transition: opacity 0.2s ease; }
-  .lightbox-img { transform: none !important; }
-}
 .hashtag-callout span {
   display: inline-block;
   margin-top: 0.2em;
   font-size: 1.7rem;
   color: var(--color-rose);
 }
-
-/* =========================================================
-   CONTACTOS
-   ========================================================= */
-.contactos { padding-block: 50px; text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
-.contactos .option .btn { margin-top: var(--space-md); }
 
 /* =========================================================
    RSVP — llamado final en la landing + página aparte (rsvp.html)
@@ -1111,6 +1037,7 @@ body.rsvp-page {
   gap: var(--space-md);
   text-align: left;
 }
+.rsvp-form[hidden] { display: none; }
 .field label {
   display: block;
   font-size: 0.68rem;
@@ -1167,13 +1094,36 @@ body.rsvp-page {
 .rsvp-success {
   display: none;
   margin-top: var(--space-xl);
-  padding: var(--space-lg);
-  background: var(--color-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(59, 42, 44, 0.12);
+  text-align: center;
 }
 .rsvp-success.is-visible { display: block; animation: fade-pop 0.6s var(--ease-editorial); }
-.rsvp-success .heart-icon { color: var(--color-rose); width: 30px; height: 30px; margin-inline: auto var(--space-sm); }
+
+/* al confirmar, el mensaje de gracias queda centrado en el espacio que
+   deja el formulario, en vez de pegado arriba con un vacío abajo */
+.rsvp-card.is-success { display: flex; flex-direction: column; }
+.rsvp-card.is-success .rsvp-success {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.rsvp-success .heart-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; height: 50px;
+  border: 1px solid var(--color-blush-deep);
+  border-radius: 50%;
+  color: var(--color-rose);
+  margin-bottom: var(--space-sm);
+}
+.rsvp-success .heart-icon { width: 20px; height: 20px; }
 .rsvp-success h3 { font-family: var(--font-display); font-style: italic; font-size: 1.5rem; }
 .rsvp-success p { margin-top: 0.5em; color: var(--color-ink-soft); }
 
@@ -1359,16 +1309,20 @@ body.rsvp-page {
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
+  background: radial-gradient(circle at 50% 20%, var(--color-cream-soft) 0%, var(--color-cream) 65%);
 }
+.login-screen[hidden] { display: none; }
 .login-card {
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   background: var(--color-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(59,42,44,0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 60px -30px rgba(59,42,44,0.35);
   padding: var(--space-xl) var(--space-lg);
   text-align: center;
 }
+.login-card .monogram .heart { color: var(--color-rose); }
 .login-card .monogram { justify-content: center; margin-bottom: var(--space-sm); }
 .login-card h1 {
   font-family: var(--font-display);
@@ -1415,14 +1369,15 @@ body.rsvp-page {
 .stat-tile {
   background: var(--color-white);
   border: 1px solid rgba(59,42,44,0.08);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: var(--space-md) var(--space-sm);
   text-align: center;
+  box-shadow: 0 10px 24px -18px rgba(59,42,44,0.25);
 }
 .stat-tile .stat-number {
   font-family: var(--font-display);
-  font-size: 1.8rem;
-  color: var(--color-ink);
+  font-size: 2rem;
+  color: var(--color-rose);
 }
 .stat-tile .stat-label {
   font-size: 0.65rem;
@@ -1481,6 +1436,47 @@ table.rsvp-table {
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 .copy-link-btn:hover { border-color: var(--color-rose); color: var(--color-rose); }
+.copy-link-btn.is-danger:hover { border-color: #A6453D; color: #A6453D; }
+
+.row-actions { display: flex; flex-wrap: wrap; gap: 0.4em; }
+
+.guests-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--space-md); }
+
+/* ---- modal agregar/editar invitado ---- */
+.guest-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: rgba(28, 22, 15, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.guest-modal.is-visible { opacity: 1; }
+.guest-modal[hidden] { display: none; }
+.guest-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 60px -30px rgba(59,42,44,0.45);
+  padding: var(--space-xl) var(--space-lg);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 0.3s var(--ease-editorial);
+}
+.guest-modal.is-visible .guest-modal-card { transform: translateY(0) scale(1); }
+.guest-modal-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+.guest-modal-card #guestForm { display: flex; flex-direction: column; gap: var(--space-md); text-align: left; }
+.guest-modal-card .btn { justify-content: center; margin-top: var(--space-xs); }
 
 .admin-empty, .admin-loading, .admin-error {
   text-align: center;
@@ -1603,7 +1599,7 @@ html.no-scroll body { overflow: hidden; height: 100%; }
   place-items: center;
   padding: clamp(14px, 3vw, 28px);
   background: radial-gradient(circle at 50% 38%, #F6EEDE 0%, #EAE0C6 55%, #DDD0A9 100%);
-  transition: opacity 0.65s var(--ease-editorial), transform 0.65s var(--ease-editorial);
+  transition: opacity 2s var(--ease-editorial), transform 2s var(--ease-editorial);
 }
 .envelope-gate.is-skipped { display: none; }
 .envelope-gate.is-closing { opacity: 0; transform: scale(1.03); pointer-events: none; }
