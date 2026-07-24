@@ -617,9 +617,10 @@
     <p class="rsvp-deadline">Por favor, confirma tu asistencia antes del 15 de Octubre de 2026.</p>
 
     <form class="rsvp-form" id="rsvpForm" novalidate>
-      <div class="field">
+      <div class="field field-autocomplete">
         <label for="fullName">Nombre</label>
-        <input type="text" id="fullName" name="fullName" placeholder="Juan Pérez" required autocomplete="name">
+        <input type="text" id="fullName" name="fullName" placeholder="Juan Pérez" required autocomplete="off">
+        <ul class="autocomplete-list" id="fullNameSuggestions" hidden></ul>
       </div>
 
       <div class="field">

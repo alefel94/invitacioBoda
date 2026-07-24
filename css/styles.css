@@ -1072,6 +1072,33 @@ body.rsvp-page {
 .rsvp-card .field textarea { padding: 0.65em 0.9em; }
 .rsvp-card .field textarea { min-height: 56px; }
 
+.field-autocomplete { position: relative; }
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 0.3em);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--color-white);
+  border: 1px solid rgba(59,42,44,0.14);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 16px 32px -18px rgba(59,42,44,0.35);
+}
+.autocomplete-list[hidden] { display: none; }
+.autocomplete-list li {
+  padding: 0.65em 1em;
+  font-size: 0.92rem;
+  color: var(--color-ink);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(59,42,44,0.06);
+}
+.autocomplete-list li:last-child { border-bottom: none; }
+.autocomplete-list li mark { background: none; color: var(--color-rose); font-weight: 600; }
+.autocomplete-list li:hover,
+.autocomplete-list li.is-active { background: var(--color-cream-soft); }
+
 .field-collapsible {
   display: grid;
   grid-template-rows: 1fr;

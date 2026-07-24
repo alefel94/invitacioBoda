@@ -23,7 +23,13 @@
   const successEl = document.getElementById("rsvpSuccess");
   const successTitle = document.getElementById("rsvpSuccessTitle");
   const successText = document.getElementById("rsvpSuccessText");
-  const inviteCode = sessionStorage.getItem("inviteCode") || "";
+  const suggestionsList = document.getElementById("fullNameSuggestions");
+
+  // empieza con el código de la URL/sesión, si lo hay; elegir un nombre del
+  // autocompletado lo reemplaza por el código de esa invitación específica
+  const urlInviteCode = sessionStorage.getItem("inviteCode") || "";
+  let selectedInviteCode = urlInviteCode;
+  let lockedName = ""; // nombre exacto que corresponde a selectedInviteCode
 
   // el botón solo se habilita cuando Nombre y ¿Asistirás? tienen datos
   function updateSubmitState() {
@@ -41,14 +47,16 @@
     }
   }
 
-  // precarga los datos de la invitación, si el link trae un código válido
-  async function loadInvite() {
-    if (!inviteCode) return;
+  // precarga los datos de una invitación (por el código de la URL/sesión al
+  // entrar, o el de la invitación elegida en el autocompletado)
+  async function loadInvite(code) {
+    if (!code) return;
     try {
-      const res = await fetch(`/api/guest?code=${encodeURIComponent(inviteCode)}`);
+      const res = await fetch(`/api/guest?code=${encodeURIComponent(code)}`);
       if (!res.ok) return; // código inválido: se queda el formulario genérico
       const guest = await res.json();
 
+      selectedInviteCode = code;
       setGuestOptions(guest.allowedGuests || 1);
       note.textContent = `Invitación de ${guest.displayName} · ${guest.allowedGuests} boleto${guest.allowedGuests === 1 ? "" : "s"} asignado${guest.allowedGuests === 1 ? "" : "s"}.`;
       note.className = "form-note success";
@@ -63,12 +71,131 @@
       } else {
         form.fullName.value = guest.displayName;
       }
+      lockedName = form.fullName.value;
       updateSubmitState();
     } catch (err) {
       /* sin conexión o similar: se queda el formulario genérico */
     }
   }
-  loadInvite();
+  loadInvite(selectedInviteCode);
+
+  // ---------- Autocompletado del nombre con la lista de invitados ----------
+  let guestDirectory = [];
+  let activeSuggestionIndex = -1;
+
+  function normalize(str) {
+    return str
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase();
+  }
+
+  async function loadGuestDirectory() {
+    try {
+      const res = await fetch("/api/guest-directory");
+      if (!res.ok) return;
+      const data = await res.json();
+      guestDirectory = data.guests || [];
+    } catch (err) {
+      /* sin autocompletado disponible; el formulario genérico sigue funcionando */
+    }
+  }
+  loadGuestDirectory();
+
+  function hideSuggestions() {
+    suggestionsList.hidden = true;
+    suggestionsList.innerHTML = "";
+    activeSuggestionIndex = -1;
+  }
+
+  function highlightMatch(name, query) {
+    const idx = normalize(name).indexOf(query);
+    if (idx === -1) return escapeHtmlRsvp(name);
+    return (
+      escapeHtmlRsvp(name.slice(0, idx)) +
+      "<mark>" + escapeHtmlRsvp(name.slice(idx, idx + query.length)) + "</mark>" +
+      escapeHtmlRsvp(name.slice(idx + query.length))
+    );
+  }
+
+  function escapeHtmlRsvp(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function showSuggestions(matches, query) {
+    if (!matches.length) return hideSuggestions();
+    suggestionsList.innerHTML = matches
+      .map(
+        (g, i) =>
+          `<li role="option" data-index="${i}" data-code="${g.inviteCode}">${highlightMatch(g.displayName, query)}</li>`
+      )
+      .join("");
+    suggestionsList.hidden = false;
+    activeSuggestionIndex = -1;
+  }
+
+  function pickSuggestion(inviteCodeToLoad, displayName) {
+    form.fullName.value = displayName;
+    hideSuggestions();
+    loadInvite(inviteCodeToLoad);
+  }
+
+  form.fullName.addEventListener("input", () => {
+    // si el texto ya no coincide con la invitación que se había elegido
+    // (URL o autocompletado), se suelta esa liga para no mandar el boleto
+    // de alguien más con un nombre distinto
+    if (lockedName && form.fullName.value !== lockedName) {
+      lockedName = "";
+      selectedInviteCode = "";
+      setGuestOptions(1);
+      note.textContent = "";
+      note.className = "form-note";
+    }
+
+    const query = normalize(form.fullName.value.trim());
+    if (query.length < 2) return hideSuggestions();
+    const matches = guestDirectory
+      .filter((g) => normalize(g.displayName).includes(query))
+      .slice(0, 6);
+    showSuggestions(matches, query);
+  });
+
+  suggestionsList.addEventListener("click", (event) => {
+    const li = event.target.closest("li[data-code]");
+    if (!li) return;
+    pickSuggestion(li.dataset.code, guestDirectory.find((g) => g.inviteCode === li.dataset.code)?.displayName || form.fullName.value);
+  });
+
+  form.fullName.addEventListener("keydown", (event) => {
+    const items = Array.from(suggestionsList.querySelectorAll("li"));
+    if (suggestionsList.hidden || !items.length) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      activeSuggestionIndex = (activeSuggestionIndex + 1) % items.length;
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      activeSuggestionIndex = (activeSuggestionIndex - 1 + items.length) % items.length;
+    } else if (event.key === "Enter" && activeSuggestionIndex >= 0) {
+      event.preventDefault();
+      items[activeSuggestionIndex].click();
+      return;
+    } else if (event.key === "Escape") {
+      hideSuggestions();
+      return;
+    } else {
+      return;
+    }
+
+    items.forEach((li, i) => li.classList.toggle("is-active", i === activeSuggestionIndex));
+    items[activeSuggestionIndex].scrollIntoView({ block: "nearest" });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".field-autocomplete")) hideSuggestions();
+  });
 
   form.fullName.addEventListener("input", updateSubmitState);
 
@@ -104,7 +231,7 @@
       attending,
       guestCount: attending ? Number(form.guestCount.value) : 0,
       message: form.message.value.trim(),
-      inviteCode: inviteCode || undefined,
+      inviteCode: selectedInviteCode || undefined,
     };
 
     submitBtn.disabled = true;
