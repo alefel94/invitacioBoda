@@ -21,6 +21,19 @@
     toggle.setAttribute("aria-label", isPlaying ? "Silenciar música" : "Reproducir música");
   }
 
+  // al minimizar/cambiar de app se pausa sola; al volver, se reanuda SOLO
+  // si sonaba antes (si el invitado ya la había silenciado, se queda así)
+  let wasPlayingBeforeHidden = false;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      wasPlayingBeforeHidden = !music.paused;
+      if (wasPlayingBeforeHidden) music.pause();
+    } else if (wasPlayingBeforeHidden) {
+      wasPlayingBeforeHidden = false;
+      music.play().then(() => setPlayingUI(true)).catch(() => {});
+    }
+  });
+
   toggle.addEventListener("click", () => {
     if (music.paused) {
       music.play().then(() => setPlayingUI(true)).catch(() => {});
