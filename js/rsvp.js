@@ -24,6 +24,9 @@
   const successTitle = document.getElementById("rsvpSuccessTitle");
   const successText = document.getElementById("rsvpSuccessText");
   const suggestionsList = document.getElementById("fullNameSuggestions");
+  const burnLetter = document.getElementById("burnLetter");
+  const BURN_DURATION_MS = 3700;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // empieza con el código de la URL/sesión, si lo hay; elegir un nombre del
   // autocompletado lo reemplaza por el código de esa invitación específica
@@ -255,26 +258,47 @@
       }
 
       form.hidden = true;
-      successEl.classList.add("is-visible");
       const card = successEl.closest(".rsvp-card");
-      card?.classList.add("is-success");
-      card?.querySelector(".rsvp-deadline")?.setAttribute("hidden", "");
-      card?.scrollTo({ top: 0, behavior: "instant" });
       sessionStorage.setItem("envelopeOpened", "1");
 
-      if (document.body.classList.contains("rsvp-page")) {
-        // página independiente (rsvp.html visitada directo): sí hay que
-        // navegar, así que le pasamos el testigo a la música primero
-        window.handOffMusic?.();
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 2600);
+      function revealSuccess() {
+        card?.classList.remove("is-burning");
+        successEl.classList.add("is-visible");
+        card?.classList.add("is-success");
+        card?.querySelector(".rsvp-deadline")?.setAttribute("hidden", "");
+        card?.scrollTo({ top: 0, behavior: "instant" });
+
+        if (document.body.classList.contains("rsvp-page")) {
+          // página independiente (rsvp.html visitada directo): sí hay que
+          // navegar, así que le pasamos el testigo a la música primero
+          window.handOffMusic?.();
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2600);
+        } else {
+          // superposición dentro de index.html: nunca se sale de la página,
+          // así que la música no necesita ningún testigo — solo se cierra
+          setTimeout(() => {
+            window.closeRsvpOverlay?.();
+          }, 1800);
+        }
+      }
+
+      // la carta se "quema" antes de mostrar el mensaje de gracias; con
+      // movimiento reducido se salta directo (o si el elemento no existe,
+      // por si rsvp.html se abrió de una versión vieja en caché)
+      if (reducedMotion || !burnLetter) {
+        revealSuccess();
       } else {
-        // superposición dentro de index.html: nunca se sale de la página,
-        // así que la música no necesita ningún testigo — solo se cierra
+        burnLetter.hidden = false;
+        card?.classList.add("is-burning");
+        card?.scrollTo({ top: 0, behavior: "instant" });
+        requestAnimationFrame(() => burnLetter.classList.add("is-burning"));
         setTimeout(() => {
-          window.closeRsvpOverlay?.();
-        }, 1800);
+          burnLetter.hidden = true;
+          burnLetter.classList.remove("is-burning");
+          revealSuccess();
+        }, BURN_DURATION_MS);
       }
     } catch (err) {
       note.textContent = "No pudimos enviar tu confirmación. Intenta de nuevo en un momento.";

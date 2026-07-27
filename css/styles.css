@@ -490,18 +490,24 @@ blockquote.vow {
   text-align: left;
 }
 
-/* "corta" la línea central a la altura de cada horario */
-.timeline-item::before {
-  content: "";
+/* insignia con ícono en cada nodo: además de marcar el punto, "corta"
+   la línea central a la altura de cada horario */
+.timeline-icon {
   position: absolute;
-  top: 0.05rem;
-  width: 20px;
-  height: 20px;
+  top: -3px;
+  width: 34px; height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   background: var(--color-cream-soft);
+  border: 1px solid var(--color-blush-deep);
+  color: var(--color-rose);
   z-index: 1;
 }
-.timeline-item:nth-child(odd)::before { right: -10px; }
-.timeline-item:nth-child(even)::before { left: -10px; }
+.timeline-icon svg { width: 16px; height: 16px; }
+.timeline-item:nth-child(odd) .timeline-icon { right: -17px; }
+.timeline-item:nth-child(even) .timeline-icon { left: -17px; }
 
 .timeline-time {
   display: block;
@@ -661,23 +667,25 @@ blockquote.vow {
   display: grid;
   gap: var(--space-lg);
 }
-.padrino { padding-top: var(--space-lg); }
+.padrino { padding-top: var(--space-xl); }
 .padrino:first-child { padding-top: 0; }
 .padrino:not(:first-child) { border-top: 1px solid rgba(59, 42, 44, 0.12); }
 .padrino-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px; height: 42px;
+  width: 50px; height: 50px;
+  border: 1px solid var(--color-blush-deep);
+  border-radius: 50%;
   color: var(--color-rose);
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-sm);
 }
 .padrino-icon svg { width: 22px; height: 22px; }
 
 @media (min-width: 640px) {
-  .padrinos-grid { grid-template-columns: repeat(2, 1fr); row-gap: var(--space-lg); column-gap: var(--space-xl); }
+  .padrinos-grid { grid-template-columns: repeat(2, 1fr); row-gap: var(--space-xl); column-gap: var(--space-xl); }
   .padrino { padding-top: 0; border-top: none !important; }
-  .padrino:nth-child(1), .padrino:nth-child(2) { padding-bottom: var(--space-lg); border-bottom: 1px solid rgba(59, 42, 44, 0.12); }
+  .padrino:nth-child(1), .padrino:nth-child(2) { padding-bottom: var(--space-xl); border-bottom: 1px solid rgba(59, 42, 44, 0.12); }
   .padrino:nth-child(odd) { border-right: 1px solid rgba(59, 42, 44, 0.12); padding-right: var(--space-lg); }
   .padrino:nth-child(even) { padding-left: var(--space-lg); }
 }
@@ -724,7 +732,7 @@ blockquote.vow {
 /* =========================================================
    CÓDIGO DE VESTIMENTA
    ========================================================= */
-.vestimenta { padding-block: 50px; text-align: center; scroll-margin-top: 88px; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
+.vestimenta { padding-block: 24px; text-align: center; scroll-margin-top: 88px; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
 .vestimenta-card {
   margin: var(--space-md) auto 0;
   max-width: 440px;
@@ -788,7 +796,7 @@ blockquote.vow {
 /* =========================================================
    MESA DE REGALOS
    ========================================================= */
-.regalos { padding-block: 50px; text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
+.regalos { padding-block: 24px; text-align: center; background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%); }
 
 /* =========================================================
    GALERÍA
@@ -914,7 +922,7 @@ blockquote.vow {
    ========================================================= */
 .rsvp-cta {
   position: relative;
-  padding-block: 50px;
+  padding-block: 24px;
   background: linear-gradient(to bottom, transparent 0, var(--color-cream-soft) 110px, var(--color-cream-soft) calc(100% - 110px), transparent 100%);
   text-align: center;
   overflow: hidden;
@@ -1118,6 +1126,122 @@ body.rsvp-page {
 .form-note.success { color: #5C7A5E; }
 .form-note.error { color: #A6453D; }
 
+/* ---- carta que se quema: entre "Confirmar" y el mensaje de gracias ---- */
+.burn-letter {
+  display: none;
+  margin-top: var(--space-xl);
+  padding-block: var(--space-lg);
+}
+.burn-letter:not([hidden]) { display: flex; align-items: center; justify-content: center; }
+
+.burn-stage {
+  position: relative;
+  width: 132px;
+  height: 176px;
+}
+
+.burn-paper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(to top, #1c0f07 0%, #1c0f07 6%, transparent 20%),
+    radial-gradient(ellipse at 28% 15%, rgba(255, 252, 244, 0.65) 0%, transparent 55%),
+    #F7F0E1;
+  border-radius: 2px;
+  box-shadow: 0 18px 40px -18px rgba(59, 42, 44, 0.4), inset 0 0 0 1px rgba(59, 42, 44, 0.07);
+  padding: 20px 14px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  clip-path: inset(0 0 0 0);
+  transform: rotate(-1deg);
+  overflow: hidden;
+}
+/* textura de papel: el mismo ruido sutil que usa el fondo del sitio */
+.burn-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* doblez de la carta, como si viniera guardada en tercios */
+.burn-paper::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 50%;
+  height: 1px;
+  background: rgba(59, 42, 44, 0.1);
+  z-index: 1;
+}
+.burn-heading {
+  font-family: var(--font-script);
+  font-size: 1.15rem;
+  color: var(--color-rose);
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.burn-script { width: 88%; height: auto; opacity: 0.8; position: relative; z-index: 1; }
+
+.burn-glow {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: 0;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 178, 80, 0.95) 0%, rgba(255, 92, 20, 0.55) 45%, transparent 75%);
+  filter: blur(3px);
+  opacity: 0;
+}
+.burn-ember {
+  position: absolute;
+  bottom: 6%;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: #FFB347;
+  opacity: 0;
+}
+.burn-ember-1 { left: 30%; }
+.burn-ember-2 { left: 52%; }
+.burn-ember-3 { left: 70%; }
+
+.burn-letter.is-burning .burn-paper { animation: burn-clip 3.6s ease-in forwards; }
+.burn-letter.is-burning .burn-glow { animation: burn-glow-move 3.6s ease-in forwards; }
+.burn-letter.is-burning .burn-ember-1 { animation: burn-ember-rise 2.8s ease-out 0.3s forwards; }
+.burn-letter.is-burning .burn-ember-2 { animation: burn-ember-rise 2.6s ease-out 1.1s forwards; }
+.burn-letter.is-burning .burn-ember-3 { animation: burn-ember-rise 3s ease-out 1.9s forwards; }
+
+@keyframes burn-clip {
+  0% { clip-path: inset(0 0 0% 0); transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+  100% { clip-path: inset(0 0 100% 0); transform: rotate(-2deg); opacity: 0; }
+}
+@keyframes burn-glow-move {
+  0% { bottom: -4%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { bottom: 96%; opacity: 0; }
+}
+@keyframes burn-ember-rise {
+  0% { bottom: 10%; opacity: 0; transform: translateY(0) scale(1); }
+  20% { opacity: 1; }
+  100% { bottom: 100%; opacity: 0; transform: translateY(-30px) scale(0.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burn-letter.is-burning .burn-paper,
+  .burn-letter.is-burning .burn-glow,
+  .burn-letter.is-burning .burn-ember { animation: none; }
+  .burn-letter.is-burning .burn-paper { opacity: 0; }
+}
+
 .rsvp-success {
   display: none;
   margin-top: var(--space-xl);
@@ -1127,9 +1251,10 @@ body.rsvp-page {
 }
 .rsvp-success.is-visible { display: block; animation: fade-pop 0.6s var(--ease-editorial); }
 
-/* al confirmar, el mensaje de gracias queda centrado en el espacio que
-   deja el formulario, en vez de pegado arriba con un vacío abajo */
-.rsvp-card.is-success { display: flex; flex-direction: column; }
+/* al confirmar, el mensaje de gracias (o antes, la carta quemándose) queda
+   centrado en el espacio que deja el formulario, sin un vacío abajo */
+.rsvp-card.is-success,
+.rsvp-card.is-burning { display: flex; flex-direction: column; }
 .rsvp-card.is-success .rsvp-success {
   flex: 1;
   display: flex;
@@ -1139,6 +1264,11 @@ body.rsvp-page {
   margin-top: 0;
   padding-top: 0;
   border-top: none;
+}
+.rsvp-card.is-burning .burn-letter {
+  flex: 1;
+  margin-top: 0;
+  padding-block: 0;
 }
 .rsvp-success .heart-icon-wrap {
   display: inline-flex;

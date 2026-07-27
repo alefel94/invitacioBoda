@@ -37,17 +37,32 @@ async function handleCreate(req, res) {
     const safeName = fullName.trim().slice(0, 120);
 
     if (guestId) {
-      // una sola fila por invitación: si ya había confirmado, se actualiza
+      // una sola fila por invitación: si esa invitación YA tiene una
+      // respuesta guardada, no se sobrescribe en silencio — se avisa.
+      const { rows: existingRows } = await sql`
+        SELECT attending, guest_count, message, created_at
+        FROM rsvp_responses
+        WHERE guest_id = ${guestId}
+        LIMIT 1
+      `;
+
+      if (existingRows.length) {
+        const existing = existingRows[0];
+        return res.status(200).json({
+          ok: true,
+          duplicate: true,
+          existing: {
+            attending: existing.attending,
+            guestCount: existing.guest_count,
+            message: existing.message,
+            createdAt: existing.created_at,
+          },
+        });
+      }
+
       await sql`
         INSERT INTO rsvp_responses (guest_id, full_name, attending, guest_count, message)
         VALUES (${guestId}, ${safeName}, ${isAttending}, ${safeGuestCount}, ${safeMessage})
-        ON CONFLICT (guest_id) WHERE guest_id IS NOT NULL
-        DO UPDATE SET
-          full_name = EXCLUDED.full_name,
-          attending = EXCLUDED.attending,
-          guest_count = EXCLUDED.guest_count,
-          message = EXCLUDED.message,
-          created_at = NOW()
       `;
     } else {
       // sin código de invitación: no hay una sola fila "dueña" del nombre,
